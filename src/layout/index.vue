@@ -2,7 +2,7 @@
 <!-- 导航栏 -->
   <app-topnav></app-topnav>
 <!-- 头部 -->
-  <header>header</header>
+  <app-header></app-header>
 <!-- 内容区域 -->
   <main>
 <!-- 二级路由 -->
@@ -14,10 +14,12 @@
 
 <script>
 import AppTopnav from '@/components/app-topnav'
+import AppHeader from '@/components/app-header'
 export default {
   name: 'Layout',
   components: {
-    AppTopnav
+    AppTopnav,
+    AppHeader
   }
 }
 </script>
