@@ -7,7 +7,7 @@ import axios from 'axios'
 import store from '@/store'
 import router from '@/router'
 
-const baseURL = 'http://pcapi-xiaotuxian-front-devtest.itheima.net/'
+const baseURL = 'https://apipc-xiaotuxian-front.itheima.net/'
 const service = axios.create({
   baseURL,
   timeout: 5000
@@ -19,7 +19,7 @@ service.interceptors.request.use(config => {
   // 进行请求配置的修改
   // 如果本地又token就在头部携带
   // 1. 获取用户信息对象
-  const { profile } = store.user.state
+  const { profile } = store.state.user
   // 2. 判断是否有token
   if (profile.token) {
     // 3. 设置token
