@@ -32,8 +32,8 @@ service.interceptors.request.use(config => {
 
 // 响应拦截器
 service.interceptors.response.use(res => {
-  const data = res.data
-  console.log(data)
+  return res.data
+  // console.log(data)
 }, err => {
   // 处理 401 状态码
   if (err.response && err.response.status === 401) {
