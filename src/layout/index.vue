@@ -1,6 +1,6 @@
 <template>
 <!-- 导航栏 -->
-  <nav>nav</nav>
+  <app-topnav></app-topnav>
 <!-- 头部 -->
   <header>header</header>
 <!-- 内容区域 -->
@@ -13,7 +13,11 @@
 </template>
 
 <script>
+import AppTopnav from '@/components/app-topnav'
 export default {
-  name: 'Layout'
+  name: 'Layout',
+  components: {
+    AppTopnav
+  }
 }
 </script>
