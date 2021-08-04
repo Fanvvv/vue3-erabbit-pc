@@ -9,17 +9,19 @@
     <router-view/>
   </main>
 <!-- 尾部 -->
-  <footer>footer</footer>
+  <app-footer></app-footer>
 </template>
 
 <script>
 import AppTopnav from '@/components/app-topnav'
 import AppHeader from '@/components/app-header'
+import AppFooter from '@/components/app-footer'
 export default {
   name: 'Layout',
   components: {
     AppTopnav,
-    AppHeader
+    AppHeader,
+    AppFooter
   }
 }
 </script>
