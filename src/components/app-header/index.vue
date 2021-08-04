@@ -2,18 +2,7 @@
 <header class="app-header">
   <div class="container">
     <h1 class="logo"><RouterLink to="/">小兔鲜儿</RouterLink></h1>
-    <ul class="navs">
-      <li class="home"><RouterLink to="/">首页</RouterLink></li>
-      <li><a href="#">居家</a></li>
-      <li><a href="#">美食</a></li>
-      <li><a href="#">服饰</a></li>
-      <li><a href="#">母婴</a></li>
-      <li><a href="#">个护</a></li>
-      <li><a href="#">严选</a></li>
-      <li><a href="#">数码</a></li>
-      <li><a href="#">运动</a></li>
-      <li><a href="#">杂项</a></li>
-    </ul>
+    <header-nav></header-nav>
     <div class="search">
       <i class="iconfont icon-search"></i>
       <input type="text" placeholder="搜一搜">
@@ -29,8 +18,12 @@
 </template>
 
 <script>
+import HeaderNav from './header-nav'
 export default {
-  name: 'AppHeader'
+  name: 'AppHeader',
+  components: {
+    HeaderNav
+  }
 }
 </script>
 
@@ -48,27 +41,6 @@ export default {
         width: 100%;
         text-indent: -9999px;
         background: url("../../assets/images/logo.png") no-repeat center 18px / contain;
-      }
-    }
-    .navs {
-      display: flex;
-      justify-content: space-around;
-      padding-left: 40px;
-      width: 820px;
-      li {
-        margin-right: 40px;
-        width: 38px;
-        text-align: center;
-        a {
-          display: inline-block;
-          font-size: 16px;
-          height: 32px;
-          line-height: 32px;
-          &:hover {
-            color: @xtxColor;
-            border-bottom: 2px solid @xtxColor;
-          }
-        }
       }
     }
     .search {
