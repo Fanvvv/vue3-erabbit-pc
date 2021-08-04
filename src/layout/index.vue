@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
 import AppTopnav from '@/components/app-topnav'
 import AppHeader from '@/components/app-header'
 import AppFooter from '@/components/app-footer'
@@ -22,6 +23,11 @@ export default {
     AppTopnav,
     AppHeader,
     AppFooter
+  },
+  setup () {
+    const store = useStore()
+    // 获取分类数据
+    store.dispatch('category/getList')
   }
 }
 </script>

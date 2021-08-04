@@ -16,9 +16,9 @@ export default {
   },
   actions: {
     async getList ({ commit }) {
-      const result = await findAllCategory()
-      console.log(result)
-      commit('setCategory', result)
+      const { result } = await findAllCategory()
+      // console.log(result)
+      commit('setList', result)
     }
   }
 }
