@@ -1,12 +1,12 @@
 <template>
   <ul class="header-nav">
     <li class="home"><router-link to="/">首页</router-link></li>
-    <li v-for="item in list" :key="item.id">
-      <router-link to="/">{{item.name}}</router-link>
-      <div class="layer">
+    <li v-for="item in list" :key="item.id" @mouseenter="show(item)" @mouseleave="hide(item)">
+      <router-link :to="`/category/${item.id}`" @click="hide(item)">{{item.name}}</router-link>
+      <div class="layer" :class="{open: item.open}">
         <ul>
           <li v-for="sub in item.children" :key="sub.id">
-            <router-link to="/">
+            <router-link :to="`/category/sub/${sub.id}`" @click="hide(item)">
               <img :src="sub.picture" alt="sub.name">
               <p>{{ sub.name }}</p>
             </router-link>
@@ -27,7 +27,13 @@ export default {
     const list = computed(() => {
       return store.state.category.list
     })
-    return { list }
+    const show = item => {
+      store.commit('category/show', item)
+    }
+    const hide = item => {
+      store.commit('category/hide', item)
+    }
+    return { list, show, hide }
   }
 }
 </script>
@@ -55,14 +61,19 @@ export default {
         color: @xtxColor;
         border-bottom: 2px solid @xtxColor;
       }
-      > .layer {
-        height: 132px;
-        opacity: 1;
-      }
+      // 显示二级分类类目
+      //> .layer {
+      //  height: 132px;
+      //  opacity: 1;
+      //}
     }
   }
 }
 .layer {
+  &.open {
+    height: 132px;
+    opacity: 1;
+  }
   width: 1240px;
   background-color: #fff;
   position: absolute;
