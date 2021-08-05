@@ -3,6 +3,8 @@
   <app-topnav></app-topnav>
 <!-- 头部 -->
   <app-header></app-header>
+<!-- 吸顶导航 -->
+  <header-sticky></header-sticky>
 <!-- 内容区域 -->
   <main>
 <!-- 二级路由 -->
@@ -17,12 +19,14 @@ import { useStore } from 'vuex'
 import AppTopnav from '@/components/app-topnav'
 import AppHeader from '@/components/app-header'
 import AppFooter from '@/components/app-footer'
+import HeaderSticky from '@/components/app-header/header-sticky'
 export default {
   name: 'Layout',
   components: {
     AppTopnav,
     AppHeader,
-    AppFooter
+    AppFooter,
+    HeaderSticky
   },
   setup () {
     const store = useStore()
