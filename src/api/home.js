@@ -35,3 +35,13 @@ export const findNew = (limit) => {
     { limit }
   )
 }
+
+/*
+* 获取人气推荐
+* */
+export const findHot = () => {
+  return request(
+    'home/hot',
+    'get'
+  )
+}
