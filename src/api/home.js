@@ -10,3 +10,15 @@ export const findBrand = (limit) => {
     { limit }
   )
 }
+
+/*
+* 获取轮播图
+* distributionSite
+* */
+export const findBanner = (distributionSite) => {
+  return request(
+    '/home/banner',
+    'get',
+    { distributionSite }
+  )
+}
