@@ -8,23 +8,22 @@
       <home-banner></home-banner>
     </div>
   </div>
+  <!-- 新鲜好物 -->
+  <home-new></home-new>
 </div>
 </template>
 
 <script>
 import HomeCategory from './components/home-category'
 import HomeBanner from './components/home-banner'
+import HomeNew from './components/home-new'
+
 export default {
   name: 'HomePage',
   components: {
     HomeCategory,
-    HomeBanner
+    HomeBanner,
+    HomeNew
   }
 }
 </script>
-
-<style scoped lang="less">
-.container {
-  min-height: 800px;
-}
-</style>

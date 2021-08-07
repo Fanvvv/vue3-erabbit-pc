@@ -1,8 +1,11 @@
 <template>
 <div class="home-panel">
   <div class="container">
-    <h3>{{ title }} <small>{{ subTitle }}</small></h3>
-    <slot name="right"></slot>
+    <div class="head">
+      <h3>{{ title }} <small>{{ subTitle }}</small></h3>
+      <slot name="right"></slot>
+    </div>
+    <slot></slot>
   </div>
 </div>
 </template>
