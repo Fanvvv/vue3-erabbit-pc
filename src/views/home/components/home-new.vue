@@ -4,15 +4,18 @@
     <template #right>
       <xtx-more path="/"></xtx-more>
     </template>
-    <ul class="goods-list">
-      <li v-for="item in goods" :key="item.id">
-        <router-link :to="`/product/${item.id}`">
-          <img :src="item.picture" alt="">
-          <p class="name ellipsis">{{ item.name }}</p>
-          <p class="price">&yen;{{ item.price}}</p>
-        </router-link>
-      </li>
-    </ul>
+    <transition name="fade">
+      <ul class="goods-list" v-if="goods.length">
+        <li v-for="item in goods" :key="item.id">
+          <router-link :to="`/product/${item.id}`">
+            <img :src="item.picture" alt="">
+            <p class="name ellipsis">{{ item.name }}</p>
+            <p class="price">&yen;{{ item.price}}</p>
+          </router-link>
+        </li>
+      </ul>
+      <home-skeleton v-else></home-skeleton>
+    </transition>
   </home-panel>
 </div>
 </template>
@@ -21,10 +24,13 @@
 import { ref } from 'vue'
 import { findNew } from '@/api/home'
 import HomePanel from './home-panel'
+import HomeSkeleton from './home-skeleton'
+
 export default {
   name: 'HomeNew',
   components: {
-    HomePanel
+    HomePanel,
+    HomeSkeleton
   },
   setup () {
     const goods = ref([])
