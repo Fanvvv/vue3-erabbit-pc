@@ -45,3 +45,13 @@ export const findHot = () => {
     'get'
   )
 }
+
+/*
+* 获取产品区块数据
+* */
+export const findGoods = () => {
+  return request(
+    'home/goods',
+    'get'
+  )
+}
