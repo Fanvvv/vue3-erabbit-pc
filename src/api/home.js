@@ -55,3 +55,15 @@ export const findGoods = () => {
     'get'
   )
 }
+
+/*
+* 获取最新专题数据
+* @param {Number} limit 数量限制
+* */
+export const findSpecial = (limit) => {
+  return request(
+    '/home/special',
+    'get',
+    { limit }
+  )
+}
