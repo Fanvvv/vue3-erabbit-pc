@@ -36,7 +36,7 @@
         <router-link to="/">
           <img :src="item.picture" :alt="item.name">
           <div class="info">
-            <p class="place"><i class="iconfont icon-dingwei"></i>{{item.place}}</p>
+            <p class="place"><i class="iconfont icon-dingwei"></i>egret 白鹭</p>
             <p class="name ellipsis">{{item.name}}</p>
             <p class="desc ellipsis-2">{{item.desc}}</p>
           </div>
