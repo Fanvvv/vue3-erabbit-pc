@@ -21,7 +21,7 @@ export default {
   },
   setup () {
     const { y } = useWindowScroll()
-    console.log(y)
+    // console.log(y)
     return { y }
   }
 }
