@@ -36,7 +36,7 @@ export default {
   },
   setup () {
     const target = ref(null)
-    const result = useLazyData(target, findBrand)
+    const result = useLazyData(target, () => findBrand(10))
     // console.log(result)
     // 切换效果，前提只有 0 1 两页
     const activeIndex = ref(0)
