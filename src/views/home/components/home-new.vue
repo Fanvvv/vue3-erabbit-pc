@@ -1,6 +1,6 @@
 <template>
 <div class="home-new">
-  <home-panel title="新鲜好物" sub-title="新鲜出炉 品质靠谱">
+  <home-panel title="新鲜好物" sub-title="新鲜出炉 品质靠谱" ref="target">
     <template #right>
       <xtx-more path="/"></xtx-more>
     </template>
@@ -25,6 +25,7 @@ import { ref } from 'vue'
 import { findNew } from '@/api/home'
 import HomePanel from './home-panel'
 import HomeSkeleton from './home-skeleton'
+import { useLazyData } from '@/hooks'
 
 export default {
   name: 'HomeNew',
@@ -33,12 +34,15 @@ export default {
     HomeSkeleton
   },
   setup () {
-    const goods = ref([])
-    findNew().then(data => {
-      console.log(data)
-      goods.value = data.result
-    })
-    return { goods }
+    // const goods = ref([])
+    // findNew().then(data => {
+    //   console.log(data)
+    //   goods.value = data.result
+    // })
+    // 使用复用的钩子函数实现懒加载
+    const target = ref(null)
+    const result = useLazyData(target, findNew)
+    return { goods: result, target }
   }
 }
 </script>
