@@ -7,7 +7,7 @@
     <div class="special-list" ref="target">
       <div class="special-item" v-for="data in result" :key="data.id">
         <router-link to="/">
-          <img :src="data.detailsUrl" alt />
+          <img v-lazyload="data.detailsUrl" alt />
           <div class="meta">
             <p class="title">
               <span class="top ellipsis">{{ data.title }}</span>
@@ -40,7 +40,7 @@ export default {
   setup () {
     const target = ref(null)
     const result = useLazyData(target, findSpecial)
-    console.log(result)
+    // console.log(result)
     return { target, result }
   }
 }

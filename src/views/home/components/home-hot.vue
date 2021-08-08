@@ -5,7 +5,7 @@
       <ul class="goods-list" v-if="goods.length">
         <li v-for="item in goods" :key="item.id">
           <router-link to="/"></router-link>
-          <img :src="item.picture" alt="">
+          <img v-lazyload="item.picture" alt="">
           <p class="name">{{ item.title }}</p>
           <p class="desc">{{ item.alt }}</p>
         </li>

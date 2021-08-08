@@ -10,7 +10,7 @@
         <ul v-if="goods.length" class="list" :style="`transform: translateX(${ activeIndex ? '-50%' : 0 });`">
           <li v-for="item in goods" :key="item.id">
             <router-link to="/">
-              <img :src="item.picture" alt="">
+              <img v-lazyload="item.picture" alt="">
             </router-link>
           </li>
         </ul>

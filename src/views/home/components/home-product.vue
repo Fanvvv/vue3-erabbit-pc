@@ -9,7 +9,7 @@
     </template>
     <div class="box">
       <router-link class="cover" to="/">
-        <img :src="data.picture" alt="">
+        <img v-lazyload="data.picture" alt="">
         <strong class="label">
           <span>{{ data.name }}馆</span>
           <span class="ellipsis">{{ data.saleInfo }}</span>
@@ -41,7 +41,7 @@ export default {
   setup () {
     const target = ref(null)
     const result = useLazyData(target, findGoods)
-    console.log(result)
+    // console.log(result)
     return { target, result }
   }
 }
