@@ -1,6 +1,6 @@
 <template>
 <div class="xtx-more">
-  <router-link to="/test">
+  <router-link :to="path">
     <span>查看全部</span>
     <i class="iconfont icon-angle-right"></i>
   </router-link>
