@@ -22,25 +22,39 @@
         </ul>
       </div>
       <!-- 分类关联商品 -->
+      <div class="ref-goods" v-for="item in goods" :key="item.id">
+        <div class="head">
+          <h3>- {{ item.name }} -</h3>
+          <p class="tag">小兔鲜儿 品质之选</p>
+          <xtx-more></xtx-more>
+        </div>
+        <div class="body">
+          <category-goods v-for="list in item.goods" :key="list.id" :goods="list"></category-goods>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { findBanner } from '@/api/home'
+import { findTopCategory } from '@/api/category'
+import CategoryGoods from './components/category-goods'
 
 export default {
   name: 'TopCategory',
+  components: {
+    CategoryGoods
+  },
   setup () {
     // 获取轮播图数据
     const sliders = ref([])
     findBanner().then(data => {
       sliders.value = data.result
     })
-    console.log(sliders)
     // 根据 url 的 param 获取分类数据
     const store = useStore()
     const route = useRoute()
@@ -49,7 +63,20 @@ export default {
         return item.id === route.params.id
       }) || {}
     })
-    return { sliders, topCategory }
+    // 获取一级类目数据
+    const goods = ref(null)
+    const getGoods = () => {
+      findTopCategory(route.params.id).then(data => {
+        // console.log(data)
+        goods.value = data.result.children
+      })
+    }
+    // 使用 watch 监听 params.id 的变化
+    watch(() => route.params.id, (newValue) => {
+      newValue && getGoods()
+    }, { immediate: true })
+    // console.log(goods)
+    return { sliders, topCategory, goods }
   }
 }
 </script>
@@ -89,6 +116,31 @@ export default {
           }
         }
       }
+    }
+  }
+  .ref-goods {
+    background-color: #fff;
+    margin-top: 20px;
+    position: relative;
+    .head {
+      .xtx-more {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .tag {
+        text-align: center;
+        color: #999;
+        font-size: 20px;
+        position: relative;
+        top: -20px;
+      }
+    }
+    .body {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      padding: 0 65px 30px;
     }
   }
 }

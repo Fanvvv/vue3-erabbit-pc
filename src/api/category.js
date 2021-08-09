@@ -10,3 +10,15 @@ export function findAllCategory () {
     'get'
   )
 }
+
+/*
+* 获取一级类目数据
+* @param id 一级类目id
+* */
+export const findTopCategory = (id) => {
+  return request(
+    '/category',
+    'get',
+    { id }
+  )
+}
