@@ -4,8 +4,9 @@
       <!-- 面包屑导航 -->
       <xtx-bread>
         <xtx-bread-item to="/">首页</xtx-bread-item>
-        <xtx-bread-item to="/">家具</xtx-bread-item>
-        <xtx-bread-item>椅子</xtx-bread-item>
+        <transition name="fade-right" mode="out-in">
+          <xtx-bread-item :key="topCategory.id">{{ topCategory.name }}</xtx-bread-item>
+        </transition>
       </xtx-bread>
       <!-- 轮播图 -->
       <xtx-carousel :slider="sliders" auto-play style="height: 500px"></xtx-carousel>

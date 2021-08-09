@@ -115,3 +115,21 @@ ul {
     }
   }
 }
+
+// 渐入渐出动画
+.fade-right {
+  &-enter-to,
+  &-leave-from {
+    opacity: 1;
+    transform: none;
+  }
+  &-enter-active,
+  &-leave-active {
+    transition: all .5s;
+  }
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: translate3d(20px,0,0);
+  }
+}
