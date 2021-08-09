@@ -1,14 +1,25 @@
 // 扩展原有的功能：全局组件、自定义指令、挂载原型方法。注意：没有全局过滤器
-import XtxSkeleton from './xtx-skeleton'
-import XtxCarousel from './xtx-carousel'
-import XtxMore from './xtx-more'
+// import XtxSkeleton from './xtx-skeleton'
+// import XtxCarousel from './xtx-carousel'
+// import XtxMore from './xtx-more'
 import defaultImg from '@/assets/images/200.png'
+
+// 使用 webpack 提供的 require.context 方法进行组件的导入，再进行统一注册
+// 自动导入组件
+const file = require.context('./', false, /\.vue$/)
 
 export default {
   install (app) {
-    app.component(XtxSkeleton.name, XtxSkeleton)
-    app.component(XtxCarousel.name, XtxCarousel)
-    app.component(XtxMore.name, XtxMore)
+    // app.component(XtxSkeleton.name, XtxSkeleton)
+    // app.component(XtxCarousel.name, XtxCarousel)
+    // app.component(XtxMore.name, XtxMore)
+    // 统一注册组件
+    file.keys().map(item => {
+      // 获取
+      const component = file(item).default
+      // 注册
+      app.component(component.name, component)
+    })
     defineDirective(app)
   }
 }
