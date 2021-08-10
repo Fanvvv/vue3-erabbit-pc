@@ -4,11 +4,11 @@
       <!-- 面包屑 -->
       <sub-bread></sub-bread>
       <!-- 筛选区 -->
-      <sub-filter></sub-filter>
+      <sub-filter @filter-change="filterChange"></sub-filter>
       <!-- 结果区 -->
       <div class="goods-list">
         <!-- 排序 -->
-        <sub-sort></sub-sort>
+        <sub-sort @sort-change="sortChange"></sub-sort>
         <!-- 列表 -->
         <ul>
           <li v-for="item in goodsList" :key="item.id" >
@@ -78,7 +78,24 @@ export default {
         finished.value = false
       }
     })
-    return { loading, finished, goodsList, getData }
+    // 监听排序改变
+    const sortChange = (sortParams) => {
+      finished.value = false
+      // 合并请求参数，保留之前参数
+      // console.log(sortParams)
+      reqParams = { ...reqParams, ...sortParams }
+      reqParams.page = 1
+      goodsList.value = []
+    }
+    // 监听筛选改变
+    const filterChange = (filterParams) => {
+      finished.value = false
+      // 合并请求参数，保留之前参数
+      reqParams = { ...reqParams, ...filterParams }
+      reqParams.page = 1
+      goodsList.value = []
+    }
+    return { loading, finished, goodsList, getData, sortChange, filterChange }
   }
 }
 </script>

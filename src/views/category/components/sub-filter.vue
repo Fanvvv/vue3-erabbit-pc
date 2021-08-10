@@ -7,7 +7,7 @@
           href="javascript:;"
           v-for="item in filterData.brands" :key="item.id"
           :class="{ active: filterData.selectedBrand === item.id }"
-          @click="filterData.selectedBrand = item.id">{{ item.name }}</a>
+          @click="changeBrand(item.id)">{{ item.name }}</a>
       </div>
     </div>
     <div class="item" v-for="p in filterData.saleProperties" :key="p.id">
@@ -17,7 +17,7 @@
           href="javascript:;"
           v-for="item in p.properties" :key="item.id"
           :class="{ active: p.selectedProp === item.id }"
-          @click="p.selectedProp = item.id">{{ item.name }}</a>
+          @click="changeProp(p, item.id)">{{ item.name }}</a>
       </div>
     </div>
   </div>
@@ -37,7 +37,7 @@ import { findSubCategoryFilter } from '@/api/category'
 
 export default {
   name: 'SubFilter',
-  setup () {
+  setup (props, { emit }) {
     // 1. 获取数据
     // 2. 数据中需要全部选中，需要预览将来点击激活功能。默认选中全部
     // 3. 完成渲染
@@ -65,7 +65,38 @@ export default {
         })
       }
     }, { immediate: true })
-    return { filterData, filterLoading }
+    // 获取筛选参数的函数
+    const getFilterParams = () => {
+      const obj = {
+        brandId: null,
+        attrs: []
+      }
+      filterData.value.saleProperties.map(item => {
+        if (item.selectedProp) {
+          const attrs = item.properties.find(attrs => {
+            return attrs.id === item.selectedProp
+          })
+          obj.attrs.push({ groupName: item.name, propertyName: attrs.name })
+        }
+      })
+      if (obj.attrs.length === 0) {
+        obj.attrs = null
+      }
+      return obj
+    }
+    // 1. 记录当前选择的品牌
+    const changeBrand = (brandId) => {
+      if (filterData.value.selectedBrand === brandId) return
+      filterData.value.selectedBrand = brandId
+      emit('filter-change', getFilterParams())
+    }
+    // 2. 记录呢选择的销售属性
+    const changeProp = (item, propId) => {
+      if (item.selectedProp === propId) return
+      item.selectedProp = propId
+      emit('filter-change', getFilterParams())
+    }
+    return { filterData, filterLoading, changeBrand, changeProp }
   }
 }
 </script>

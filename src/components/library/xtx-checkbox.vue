@@ -27,7 +27,7 @@ export default {
     const changChecked = () => {
       const newValue = !checked.value
       checked.value = newValue
-      emit('chang', newValue)
+      emit('change', newValue)
     }
     return { checked, changChecked }
   }
