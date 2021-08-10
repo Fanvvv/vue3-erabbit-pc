@@ -2,7 +2,7 @@
   <router-link class="category-goods" to="/">
     <img :src="goods.picture" alt="">
     <p class="name ellipsis">{{ goods.name }}</p>
-    <p class="desc ellipsis">{{ goods.tag }}</p>
+    <p class="desc ellipsis">{{ goods.desc }}</p>
     <p class="price">&yen;{{ goods.price}}</p>
   </router-link>
 </template>
