@@ -22,3 +22,15 @@ export const findTopCategory = (id) => {
     { id }
   )
 }
+
+/*
+* 获取二级类目筛选条件数据
+* @param id 二级类目id
+* */
+export const findSubCategoryFilter = (id) => {
+  return request(
+    '/category/sub/filter',
+    'get',
+    { id }
+  )
+}
