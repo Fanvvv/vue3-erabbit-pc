@@ -74,7 +74,9 @@ export default {
     }
     // 使用 watch 监听 params.id 的变化
     watch(() => route.params.id, (newValue) => {
-      newValue && getGoods()
+      // newValue && getGoods()
+      // 防止进入二级类目也发请求，添加发请求的条件
+      newValue && `/category/${newValue}` === route.path && getGoods()
     }, { immediate: true })
     // console.log(goods)
     return { sliders, topCategory, goods }

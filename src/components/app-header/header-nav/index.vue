@@ -1,7 +1,8 @@
 <template>
   <ul class="header-nav">
     <li class="home"><router-link to="/">首页</router-link></li>
-    <li v-for="item in list" :key="item.id" @mouseenter="show(item)" @mouseleave="hide(item)">
+    <!-- 修改逻辑：当鼠标移动进入才触发二级类目，不动的时候不触发 -->
+    <li v-for="item in list" :key="item.id" @mousemove="show(item)" @mouseleave="hide(item)">
       <router-link :to="`/category/${item.id}`" @click="hide(item)">{{item.name}}</router-link>
       <div class="layer" :class="{open: item.open}">
         <ul>
