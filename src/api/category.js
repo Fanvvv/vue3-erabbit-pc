@@ -34,3 +34,15 @@ export const findSubCategoryFilter = (id) => {
     { id }
   )
 }
+
+/*
+* 获取二级类目商品列表
+* @param {Object} params 必须包含分类ID
+* */
+export const findSubCategoryGoods = (params) => {
+  return request(
+    '/category/goods',
+    'post',
+    params
+  )
+}
