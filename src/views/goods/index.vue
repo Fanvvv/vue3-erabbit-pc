@@ -13,9 +13,12 @@
       <!-- 商品信息左边 -->
       <div class="goods-info-left">
         <goods-image :images="goods.mainPictures"></goods-image>
+        <goods-sales></goods-sales>
       </div>
       <!-- 商品信息右边 -->
-      <div class="goods-info-right"></div>
+      <div class="goods-info-right">
+        <goods-name :goods="goods"></goods-name>
+      </div>
     </div>
     <!-- 商品推荐 -->
     <goods-relevant></goods-relevant>
@@ -40,12 +43,16 @@ import { useRoute } from 'vue-router'
 import { findGoods } from '@/api/product'
 import GoodsRelevant from './components/goods-relevant'
 import GoodsImage from './components/goods-image'
+import GoodsSales from './components/goods-sales'
+import GoodsName from './components/goods-name'
 
 export default {
   name: 'GoodsPage',
   components: {
     GoodsRelevant,
-    GoodsImage
+    GoodsImage,
+    GoodsSales,
+    GoodsName
   },
   setup () {
     const goods = useGoods()
