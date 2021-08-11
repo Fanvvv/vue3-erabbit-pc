@@ -1,5 +1,5 @@
 <template>
-  <router-link class="category-goods" to="/">
+  <router-link class="category-goods" :to="`/product/${goods.id}`">
     <img :src="goods.picture" alt="">
     <p class="name ellipsis">{{ goods.name }}</p>
     <p class="desc ellipsis">{{ goods.desc }}</p>

@@ -21,7 +21,7 @@
     <h4 v-if="currCategory">{{currCategory.id === 'brand' ? '品牌' : '分类'}}推荐 <small>根据您的购买或浏览记录推荐</small></h4>
     <ul v-if="currCategory && currCategory.goods && currCategory.goods.length">
       <li v-for="item in currCategory.goods" :key="item.id">
-        <router-link to="/">
+        <router-link :to="`/product/${item.id}`">
           <img :src="item.picture" :alt="item.name">
           <div class="info">
             <p class="name ellipsis-2">{{ item.name }}</p>
