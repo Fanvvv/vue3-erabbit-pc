@@ -1,15 +1,22 @@
 <template>
-<div class="goods-page">
+<div class="goods-page" v-if="goods">
   <div class="container">
     <!-- 面包屑导航 -->
     <xtx-bread>
       <xtx-bread-item to="/">首页</xtx-bread-item>
-      <xtx-bread-item to="/">首页</xtx-bread-item>
-      <xtx-bread-item to="/">首页</xtx-bread-item>
-      <xtx-bread-item>首页</xtx-bread-item>
+      <xtx-bread-item :to="`/category/${goods.categories[1].id}`">{{ goods.categories[1].name }}</xtx-bread-item>
+      <xtx-bread-item :to="`/category/sub/${goods.categories[0].id}`">{{ goods.categories[0].name }}</xtx-bread-item>
+      <xtx-bread-item>{{ goods.name }}</xtx-bread-item>
     </xtx-bread>
     <!-- 商品信息 -->
-    <div class="goods-info"></div>
+    <div class="goods-info">
+      <!-- 商品信息左边 -->
+      <div class="goods-info-left">
+        <goods-image :images="goods.mainPictures"></goods-image>
+      </div>
+      <!-- 商品信息右边 -->
+      <div class="goods-info-right"></div>
+    </div>
     <!-- 商品推荐 -->
     <goods-relevant></goods-relevant>
     <!-- 商品详情 -->
@@ -20,20 +27,47 @@
         <!-- 注意事项 -->
         <div class="goods-warn"></div>
       </div>
+      <!-- 24小时热榜 -->
+      <div class="goods-aside"></div>
     </div>
-    <!-- 24小时热榜 -->
-    <div class="goods-aside"></div>
   </div>
 </div>
 </template>
 
 <script>
+import { ref, watch, nextTick } from 'vue'
+import { useRoute } from 'vue-router'
+import { findGoods } from '@/api/product'
 import GoodsRelevant from './components/goods-relevant'
+import GoodsImage from './components/goods-image'
+
 export default {
   name: 'GoodsPage',
   components: {
-    GoodsRelevant
+    GoodsRelevant,
+    GoodsImage
+  },
+  setup () {
+    const goods = useGoods()
+    console.log(goods)
+    return { goods }
   }
+}
+const useGoods = () => {
+  const goods = ref(null)
+  const route = useRoute()
+  watch(() => route.params.id, (newVal) => {
+    if (newVal && route.path === `/product/${newVal}`) {
+      findGoods(route.params.id).then(({ result }) => {
+        // 让商品数据为null 然后使用v-if的组件可以重新销毁和创建
+        goods.value = null
+        nextTick(() => {
+          goods.value = result
+        })
+      })
+    }
+  }, { immediate: true })
+  return goods
 }
 </script>
 
@@ -41,6 +75,16 @@ export default {
 .goods-info {
   min-height: 600px;
   background: #fff;
+  display: flex;
+  &-left {
+    width: 580px;
+    height: 600px;
+    padding: 30px 50px;
+  }
+  &-right {
+    flex: 1;
+    padding: 30px 30px 30px 0;
+  }
 }
 .goods-footer {
   display: flex;
