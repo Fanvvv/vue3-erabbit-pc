@@ -1,21 +1,21 @@
 <template>
 <div class="xtx-city" ref="target">
   <div class="select" :class="{ active }" @click="toggleDialog">
-    <span class="placeholder">{{ placeholder }}</span>
-    <span class="value"></span>
+    <span class="placeholder" v-if="!fullLocation">{{ placeholder }}</span>
+    <span class="value" v-else>{{ fullLocation }}</span>
     <i class="iconfont icon-angle-down"></i>
   </div>
   <div class="option" v-if="active">
     <div class="loading" v-if="loading"></div>
     <template v-else>
-      <span v-for="item in currList" :key="item.code">{{ item.name }}</span>
+      <span v-for="item in currList" :key="item.code" @click="changeItem(item)" class="ellipsis">{{ item.name }}</span>
     </template>
   </div>
 </div>
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { computed, ref, reactive } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import axios from 'axios'
 
@@ -25,9 +25,13 @@ export default {
     placeholder: {
       type: String,
       default: '请选择配送地址'
+    },
+    fullLocation: {
+      type: String,
+      default: ''
     }
   },
-  setup () {
+  setup (props, { emit }) {
     const target = ref(null)
     // 显示隐藏
     const active = ref(false)
@@ -43,6 +47,10 @@ export default {
         cityData.value = data
         loading.value = false
       })
+      // 清空选择结果
+      for (const key in changeResult) {
+        changeResult[key] = ''
+      }
     }
     const closeDialog = () => {
       active.value = false
@@ -56,10 +64,50 @@ export default {
     })
     // 显示点击后的数据
     const currList = computed(() => {
-      return cityData.value
+      // 默认
+      let list = cityData.value
+      // console.log(list)
+      // 市一级
+      if (changeResult.provinceCode && changeResult.provinceName) {
+        list = list.find(p => p.code === changeResult.provinceCode).areaList
+      }
+      // 县地区一级
+      if (changeResult.cityCode && changeResult.cityName) {
+        list = list.find(p => p.code === changeResult.cityCode).areaList
+      }
+      return list
     })
-    // console.log(currList)
-    return { target, toggleDialog, active, loading, currList }
+    // 定义选择的省市区数据
+    const changeResult = reactive({
+      provinceCode: '',
+      provinceName: '',
+      cityCode: '',
+      cityName: '',
+      countyCode: '',
+      countyName: '',
+      fullLocation: ''
+    })
+    const changeItem = item => {
+      // 省份
+      if (item.level === 0) {
+        changeResult.provinceCode = item.code
+        changeResult.provinceName = item.name
+      }
+      // 市
+      if (item.level === 1) {
+        changeResult.cityCode = item.code
+        changeResult.cityName = item.name
+      }
+      // 地区
+      if (item.level === 2) {
+        changeResult.countyCode = item.code
+        changeResult.countyName = item.name
+        changeResult.fullLocation = `${changeResult.provinceName} ${changeResult.cityName} ${changeResult.countyName}`
+        closeDialog()
+        emit('change', changeResult)
+      }
+    }
+    return { target, toggleDialog, active, loading, currList, changeItem }
   }
 }
 // 获取城市地区数据函数
