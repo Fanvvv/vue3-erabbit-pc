@@ -13,7 +13,7 @@ module.exports = {
   // 配置10kb下的图片打包成base64的格式
   chainWebpack: config => {
     config.module
-      .rule('image')
+      .rule('images')
       .use('url-loader')
       .loader('url-loader')
       .tap(options => Object.assign(options, { limit: 10000 }))
