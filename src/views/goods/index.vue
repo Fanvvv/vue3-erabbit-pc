@@ -18,6 +18,8 @@
       <!-- 商品信息右边 -->
       <div class="goods-info-right">
         <goods-name :goods="goods"></goods-name>
+        <!-- 商品规格 -->
+        <goods-sku :goods="goods"></goods-sku>
       </div>
     </div>
     <!-- 商品推荐 -->
@@ -45,6 +47,7 @@ import GoodsRelevant from './components/goods-relevant'
 import GoodsImage from './components/goods-image'
 import GoodsSales from './components/goods-sales'
 import GoodsName from './components/goods-name'
+import GoodsSku from './components/goods-sku'
 
 export default {
   name: 'GoodsPage',
@@ -52,7 +55,8 @@ export default {
     GoodsRelevant,
     GoodsImage,
     GoodsSales,
-    GoodsName
+    GoodsName,
+    GoodsSku
   },
   setup () {
     const goods = useGoods()
