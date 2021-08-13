@@ -71,11 +71,23 @@ const updateDisableStatus = (specs, pathSet) => {
       selectedArr[i] = val.name
       // 过滤掉 undefined 然后拼接得到 key
       const key = selectedArr.filter(v => v).join(spliter)
-      console.log(!pathSet[key])
+      // console.log(!pathSet[key])
       // 设置禁用状态
       val.disabled = !pathSet[key]
     })
   })
+}
+// 初始化默认选中状态
+const initSelectStatus = (goods, skuId) => {
+  const sku = goods.skus.find(sku => sku.id === skuId)
+  if (sku) {
+    goods.specs.forEach((spec, i) => {
+      const value = sku.specs[i].valueName
+      spec.values.forEach(val => {
+        val.selected = val.name === value
+      })
+    })
+  }
 }
 export default {
   name: 'GoodsSku',
@@ -86,13 +98,19 @@ export default {
         specs: [],
         skus: []
       })
+    },
+    skuId: {
+      type: String,
+      default: ''
     }
   },
-  setup (props) {
+  setup (props, { emit }) {
     // 获取路径字典
     const pathSet = getPathSet(props.goods.skus)
-    console.log(pathSet)
+    // console.log(pathSet)
     // console.log(props.goods)
+    // 根据传入的skuId默认选中规格按钮
+    initSelectStatus(props.goods, props.skuId)
     // 初始化时更新禁用按钮
     updateDisableStatus(props.goods.specs, pathSet)
     const clickSpecs = (specs, item) => {
@@ -107,6 +125,25 @@ export default {
       }
       // 选择后更新禁用按钮
       updateDisableStatus(props.goods.specs, pathSet)
+      // 触发change事件将sku数据传递出去
+      const selectArr = getSelectedArr(props.goods.specs).filter(v => v)
+      if (selectArr.length === props.goods.specs.length) {
+        // 完整
+        const skuIds = pathSet[selectArr.join(spliter)]
+        const sku = props.goods.skus.find(sku => sku.id === skuIds[0])
+        emit('change', {
+          skuId: sku.id,
+          price: sku.price,
+          oldPrice: sku.oldPrice,
+          inventory: sku.inventory,
+          // 属性名：属性值 属性名1：属性值1 ... 这样的字符串
+          specsText: sku.specs.reduce((p, c) => `${p} ${c.name}：${c.valueName}`, '').trim()
+        })
+      } else {
+        // 不完整
+        // 父组件需要判断是否规格选择完整，不完整不能加购物车。
+        emit('change', {})
+      }
     }
     return { clickSpecs }
   }

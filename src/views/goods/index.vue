@@ -19,7 +19,7 @@
       <div class="goods-info-right">
         <goods-name :goods="goods"></goods-name>
         <!-- 商品规格 -->
-        <goods-sku :goods="goods"></goods-sku>
+        <goods-sku :goods="goods" @change="changeSku"></goods-sku>
       </div>
     </div>
     <!-- 商品推荐 -->
@@ -60,8 +60,16 @@ export default {
   },
   setup () {
     const goods = useGoods()
-    console.log(goods)
-    return { goods }
+    // console.log(goods)
+    const changeSku = (sku) => {
+      // 修改商品的现价原价库存信息
+      if (sku.skuId) {
+        goods.value.price = sku.price
+        goods.value.oldPrice = sku.oldPrice
+        goods.value.inventory = sku.inventory
+      }
+    }
+    return { goods, changeSku }
   }
 }
 const useGoods = () => {
