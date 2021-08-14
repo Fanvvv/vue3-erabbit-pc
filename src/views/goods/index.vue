@@ -20,6 +20,8 @@
         <goods-name :goods="goods"></goods-name>
         <!-- 商品规格 -->
         <goods-sku :goods="goods" @change="changeSku"></goods-sku>
+        <!-- 商品数量按钮 -->
+        <xtx-numbox label="数量" v-model="num" :max="goods.inventory"></xtx-numbox>
       </div>
     </div>
     <!-- 商品推荐 -->
@@ -69,7 +71,8 @@ export default {
         goods.value.inventory = sku.inventory
       }
     }
-    return { goods, changeSku }
+    const num = ref(1)
+    return { goods, changeSku, num }
   }
 }
 const useGoods = () => {
