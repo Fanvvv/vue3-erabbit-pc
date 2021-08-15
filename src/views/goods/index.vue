@@ -32,7 +32,7 @@
     <div class="goods-footer">
       <div class="goods-article">
         <!-- 商品+评价 -->
-        <div class="goods-tabs"></div>
+        <goods-tabs></goods-tabs>
         <!-- 注意事项 -->
         <div class="goods-warn"></div>
       </div>
@@ -56,6 +56,7 @@ import GoodsSales from './components/goods-sales'
 import GoodsName from './components/goods-name'
 import GoodsSku from './components/goods-sku'
 import GoodsHot from './components/goods-hot'
+import GoodsTabs from './components/goods-tabs'
 
 export default {
   name: 'GoodsPage',
@@ -65,7 +66,8 @@ export default {
     GoodsSales,
     GoodsName,
     GoodsSku,
-    GoodsHot
+    GoodsHot,
+    GoodsTabs
   },
   setup () {
     const goods = useGoods()
@@ -126,10 +128,6 @@ const useGoods = () => {
     width: 280px;
     min-height: 1000px;
   }
-}
-.goods-tabs {
-  min-height: 600px;
-  background: #fff;
 }
 .goods-warn {
   min-height: 600px;
