@@ -37,7 +37,10 @@
         <div class="goods-warn"></div>
       </div>
       <!-- 24小时热榜 -->
-      <div class="goods-aside"></div>
+      <div class="goods-aside">
+        <goods-hot :type="1" :goods-id="goods.id"></goods-hot>
+        <goods-hot :type="2" :goods-id="goods.id"></goods-hot>
+      </div>
     </div>
   </div>
 </div>
@@ -52,6 +55,7 @@ import GoodsImage from './components/goods-image'
 import GoodsSales from './components/goods-sales'
 import GoodsName from './components/goods-name'
 import GoodsSku from './components/goods-sku'
+import GoodsHot from './components/goods-hot'
 
 export default {
   name: 'GoodsPage',
@@ -60,7 +64,8 @@ export default {
     GoodsImage,
     GoodsSales,
     GoodsName,
-    GoodsSku
+    GoodsSku,
+    GoodsHot
   },
   setup () {
     const goods = useGoods()
