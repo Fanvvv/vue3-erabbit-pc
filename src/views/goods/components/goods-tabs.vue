@@ -8,7 +8,7 @@
       <a
         href="javascript:;"
         :class="{ active: activeComponent === 'GoodsComment' }"
-        @click="activeComponent = 'GoodsComment'">商品评价 <span>(500+)</span></a>
+        @click="activeComponent = 'GoodsComment'">商品评价<span>(999+)</span></a>
     </nav>
     <!-- 内容区域 -->
     <component :is="activeComponent"></component>
