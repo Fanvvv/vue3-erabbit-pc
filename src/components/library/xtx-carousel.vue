@@ -8,8 +8,8 @@
       <div v-else class="slider">
         <router-link v-for="goods in item" :key="goods.id" :to="`/product/${goods.id}`">
           <img :src="goods.picture" alt="">
-          <span class="name ellipsis">{{ goods.name }}</span>
-          <span class="price">&yen;{{ goods.price }}</span>
+          <p class="name ellipsis">{{ goods.name }}</p>
+          <p class="price">&yen;{{ goods.price }}</p>
         </router-link>
       </div>
     </li>
