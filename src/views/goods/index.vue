@@ -34,7 +34,9 @@
         <!-- 商品+评价 -->
         <goods-tabs></goods-tabs>
         <!-- 注意事项 -->
-        <div class="goods-warn"></div>
+        <div class="goods-warn">
+          <goods-warn></goods-warn>
+        </div>
       </div>
       <!-- 24小时热榜 -->
       <div class="goods-aside">
@@ -57,6 +59,7 @@ import GoodsName from './components/goods-name'
 import GoodsSku from './components/goods-sku'
 import GoodsHot from './components/goods-hot'
 import GoodsTabs from './components/goods-tabs'
+import GoodsWarn from './components/goods-warn'
 
 export default {
   name: 'GoodsPage',
@@ -67,7 +70,8 @@ export default {
     GoodsName,
     GoodsSku,
     GoodsHot,
-    GoodsTabs
+    GoodsTabs,
+    GoodsWarn
   },
   setup () {
     const goods = useGoods()
