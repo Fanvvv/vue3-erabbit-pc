@@ -27,7 +27,7 @@
       </div>
     </div>
     <!-- 商品推荐 -->
-    <goods-relevant></goods-relevant>
+    <goods-relevant :goods-id="goods.id"></goods-relevant>
     <!-- 商品详情 -->
     <div class="goods-footer">
       <div class="goods-article">
