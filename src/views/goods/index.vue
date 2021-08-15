@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, provide } from 'vue'
 import { useRoute } from 'vue-router'
 import { findGoods } from '@/api/product'
 import GoodsRelevant from './components/goods-relevant'
@@ -72,6 +72,8 @@ export default {
   setup () {
     const goods = useGoods()
     // console.log(goods)
+    // 子孙组件注入数据
+    provide('goods', goods)
     const changeSku = (sku) => {
       // 修改商品的现价原价库存信息
       if (sku.skuId) {
