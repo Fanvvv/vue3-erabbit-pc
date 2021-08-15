@@ -22,7 +22,7 @@ const useRelevantData = (id) => {
       sliders.value.push(result.slice(i * size, (i + 1) * size))
     }
   })
-  console.log(sliders)
+  // console.log(sliders)
   return sliders
 }
 export default {

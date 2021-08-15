@@ -32,7 +32,7 @@ export default {
     findHotGoods(props.goodsId, props.type).then(({ result }) => {
       list.value = result
     })
-    console.log(list)
+    // console.log(list)
     return { list }
   }
 }
