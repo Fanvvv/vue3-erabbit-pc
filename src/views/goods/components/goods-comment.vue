@@ -55,6 +55,8 @@
         </div>
       </div>
     </div>
+    <!-- 使用分页组件 -->
+    <xtx-pagination @current-change="changePager" :total="total" :current-page="reqParams.page"></xtx-pagination>
   </div>
 </template>
 
@@ -121,10 +123,13 @@ export default {
     }
     // 初始化或者筛选条件改变后，获取列表数据
     const commentList = ref([])
+    // 分页 记录总条数
+    const total = ref(0)
     watch(reqParams, async () => {
       const { result } = await findGoodsCommentList(goods.id, reqParams)
       commentList.value = result.items
       // console.log(commentList.value)
+      total.value = result.counts
     }, { immediate: true })
     // 定义转换数据的函数（对应vue2.0的过滤器）
     const formatSpecs = (specs) => {
@@ -135,7 +140,22 @@ export default {
     const formatNickname = (nickname) => {
       return nickname.substr(0, 1) + '*****' + nickname.substr(-1)
     }
-    return { commentInfo, currentTagIndex, changeTag, reqParams, changeSort, commentList, formatSpecs, formatNickname }
+    // 改变分页函数
+    const changePager = (np) => {
+      reqParams.page = np
+    }
+    return {
+      commentInfo,
+      currentTagIndex,
+      changeTag,
+      reqParams,
+      changeSort,
+      commentList,
+      formatSpecs,
+      formatNickname,
+      total,
+      changePager
+    }
   }
 }
 </script>
