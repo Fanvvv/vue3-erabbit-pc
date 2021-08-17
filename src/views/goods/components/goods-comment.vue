@@ -19,17 +19,46 @@
     </div>
     <div class="sort">
       <span>排序：</span>
-      <a href="javascript:;" class="active">默认</a>
-      <a href="javascript:;">最新</a>
-      <a href="javascript:;">最热</a>
+      <a
+        href="javascript:;"
+        :class="{ active: reqParams.sortField === null }"
+        @click="changeSort(null)">默认</a>
+      <a
+        href="javascript:;"
+        :class="{ active: reqParams.sortField === 'createTime' }"
+        @click="changeSort('createTime')">最新</a>
+      <a
+        href="javascript:;"
+        :class="{ active: reqParams.sortField === 'praiseCount' }"
+        @click="changeSort('praiseCount')">最热</a>
     </div>
-    <div class="list"></div>
+    <!-- 列表 -->
+    <div class="list">
+      <div class="item" v-for="item in commentList" :key="item.member.id">
+        <div class="user">
+          <img :src="item.member.avatar" alt="">
+          <span>{{ formatNickname(item.member.nickname) }}</span>
+        </div>
+        <div class="body">
+          <div class="score">
+            <i v-for="i in item.score" :key="i+'1'" class="iconfont icon-wjx01"></i>
+            <i v-for="i in 5 - item.score" :key="i+'2'" class="iconfont icon-wjx02"></i>
+            <span class="attr">{{ formatSpecs(item.orderInfo.specs) }}</span>
+          </div>
+          <div class="text">{{ item.content }}</div>
+          <div class="time">
+            <span>{{ item.createTime }}</span>
+            <span class="zan"><i class="iconfont icon-dianzan"></i>{{ item.praiseCount }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { ref, inject } from 'vue'
-import { findGoodsComment } from '@/api/product'
+import { ref, reactive, inject, watch } from 'vue'
+import { findGoodsComment, findGoodsCommentList } from '@/api/product'
 
 const getCommentInfo = (id) => {
   const commentInfo = ref(null)
@@ -57,8 +86,50 @@ export default {
     const currentTagIndex = ref(0)
     const changeTag = (i) => {
       currentTagIndex.value = i
+      // 设置有图和标签条件
+      const currTag = commentInfo.value.tags[i]
+      if (currTag.type === 'all') {
+        reqParams.hasPicture = false
+        reqParams.tag = null
+      } else if (currTag.type === 'img') {
+        reqParams.hasPicture = true
+        reqParams.tag = null
+      } else {
+        reqParams.hasPicture = false
+        reqParams.tag = currTag.title
+      }
+      reqParams.page = 1
     }
-    return { commentInfo, currentTagIndex, changeTag }
+    // 筛选条件准备
+    const reqParams = reactive({
+      page: 1,
+      pageSize: 10,
+      hasPicture: null,
+      tag: null,
+      sortField: null
+    })
+    // 改变排序
+    const changeSort = (type) => {
+      reqParams.sortField = type
+      reqParams.page = 1
+    }
+    // 初始化或者筛选条件改变后，获取列表数据
+    const commentList = ref([])
+    watch(reqParams, async () => {
+      const { result } = await findGoodsCommentList(goods.id, reqParams)
+      commentList.value = result.items
+      // console.log(commentList.value)
+    }, { immediate: true })
+    // 定义转换数据的函数（对应vue2.0的过滤器）
+    const formatSpecs = (specs) => {
+      return specs.reduce((p, c) => {
+        return `${p} ${c.name}：${c.nameValue}`
+      }, '').trim()
+    }
+    const formatNickname = (nickname) => {
+      return nickname.substr(0, 1) + '*****' + nickname.substr(-1)
+    }
+    return { commentInfo, currentTagIndex, changeTag, reqParams, changeSort, commentList, formatSpecs, formatNickname }
   }
 }
 </script>
@@ -140,6 +211,51 @@ export default {
       margin-left: 30px;
       &.active,&:hover {
         color: @xtxColor;
+      }
+    }
+  }
+  .list {
+    padding: 0 20px;
+    .item {
+      display: flex;
+      padding: 25px 10px;
+      border-bottom: 1px solid #f5f5f5;
+      .user {
+        width: 160px;
+        img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          overflow: hidden;
+        }
+        span {
+          padding-left: 10px;
+          color: #666;
+        }
+      }
+      .body {
+        flex: 1;
+        .score {
+          line-height: 40px;
+          .iconfont {
+            color: #ff9240;
+            padding-right: 3px;
+          }
+          .attr {
+            padding-left: 10px;
+            color: #666;
+          }
+        }
+      }
+      .text {
+        color: #666;
+        line-height: 24px;
+      }
+      .time {
+        color: #999;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
       }
     }
   }
