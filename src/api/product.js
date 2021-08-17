@@ -37,3 +37,16 @@ export const findHotGoods = (id, type, limit = 3) => {
     'get',
     { id, type, limit })
 }
+
+/**
+ * 获取商品评价信息
+ * @param {String} id - 商品ID
+ */
+export const findGoodsComment = (id) => {
+  // return request('/goods/:id/evaluate', 'get')
+  return request(
+    `https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate`,
+    'get',
+    { id }
+  )
+}
