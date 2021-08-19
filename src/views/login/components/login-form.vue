@@ -8,18 +8,34 @@
         <i class="iconfont icon-msg"></i>使用短信登录
       </a>
     </div>
-    <div class="form">
+    <vee-form class="form" :validation-schema="veeValidateSchema" v-slot="{ errors }" ref="formCom">
       <template v-if="!isMsg">
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <input type="text" placeholder="请输入用户名或手机号">
+            <vee-field
+              v-model="form.account"
+              name="account"
+              type="text"
+              placeholder="请输入用户名或手机号"
+              :class="{ error: errors.account }"></vee-field>
+          </div>
+          <div class="error" v-if="errors.account">
+            <i class="iconfont icon-warning"></i>{{ errors.account }}
           </div>
         </div>
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-lock"></i>
-            <input type="password" placeholder="请输入密码">
+            <vee-field
+              v-model="form.password"
+              name="password"
+              type="password"
+              placeholder="请输入密码"
+              :class="{ error: errors.password }"></vee-field>
+          </div>
+          <div class="error" v-if="errors.password">
+            <i class="iconfont icon-warning"></i>{{ errors.password }}
           </div>
         </div>
       </template>
@@ -27,28 +43,47 @@
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <input type="text" placeholder="请输入手机号">
+            <vee-field
+              v-model="form.mobile"
+              name="mobile"
+              type="text"
+              placeholder="请输入手机号"
+              :class="{ error: errors.mobile }"></vee-field>
+          </div>
+          <div class="error" v-if="errors.mobile">
+            <i class="iconfont icon-warning"></i>{{ errors.mobile }}
           </div>
         </div>
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-code"></i>
-            <input type="text" placeholder="请输入验证码">
+            <vee-field
+              v-model="form.code"
+              name="code"
+              type="text"
+              placeholder="请输入验证码"
+              :class="{ error: errors.code }"></vee-field>
             <span class="code">发送验证码</span>
+          </div>
+          <div class="error" v-if="errors.code">
+            <i class="iconfont icon-warning"></i>{{ errors.code }}
           </div>
         </div>
       </template>
       <div class="form-item">
         <div class="agree">
-          <xtx-checkbox></xtx-checkbox>
+          <vee-field as="XtxCheckbox" name="isAgree" v-model="form.isAgree"></vee-field>
           <span>我已同意</span>
           <a href="javascript:;">《隐私条款》</a>
           <span>和</span>
           <a href="javascript:;">《服务条款》</a>
         </div>
+        <div class="error" v-if="errors.isAgree">
+          <i class="iconfont icon-warning"></i>{{ errors.isAgree }}
+        </div>
       </div>
-      <a href="javascript:;" class="btn">登录</a>
-    </div>
+      <a href="javascript:;" class="btn" @click="login">登录</a>
+    </vee-form>
     <div class="action">
       <a href="javascript:;" class="icon">
         <i class="iconfont icon-qq"></i>
@@ -63,18 +98,50 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
+import { Form, Field } from 'vee-validate'
+import veeValidateSchema from '@/utils/vee-validate-schema'
 
 export default {
   name: 'LoginForm',
+  components: {
+    VeeForm: Form,
+    VeeField: Field
+  },
   setup () {
     // 是否短信登录
     const isMsg = ref(false)
     // 表单信息对象 - 用于后续表单校验的对象
     const form = reactive({
-      isAgree: true
+      isAgree: true,
+      account: null,
+      password: null,
+      mobile: null,
+      code: null
     })
-    return { isMsg, form }
+    // 切换表单元素，还原数据和清除校验效果
+    const formCom = ref(null)
+    watch(isMsg, () => {
+      // 还原数据
+      form.isAgree = true
+      form.account = null
+      form.password = null
+      form.mobile = null
+      form.code = null
+      formCom.value.resetForm()
+    })
+    // 校验规则
+    const mySchema = {
+      account: veeValidateSchema.account,
+      password: veeValidateSchema.password,
+      mobile: veeValidateSchema.mobile,
+      code: veeValidateSchema.code
+    }
+    // 点击登录时校验表单
+    const login = () => {
+      formCom.value.validate().then(valid => valid)
+    }
+    return { isMsg, form, veeValidateSchema, formCom, mySchema, login }
   }
 }
 </script>
