@@ -3,6 +3,7 @@
 // import XtxCarousel from './xtx-carousel'
 // import XtxMore from './xtx-more'
 import defaultImg from '@/assets/images/200.png'
+import Message from './Message'
 
 // 使用 webpack 提供的 require.context 方法进行组件的导入，再进行统一注册
 // 自动导入组件
@@ -45,6 +46,8 @@ const defineDirective = (app) => {
       observer.observe(el)
     }
   })
+  // 如果想挂载全局的属性，能够通过组件实例调用的属性 this.$message
+  app.config.globalProperties.$message = Message// 原型函数
 }
 
 // 创建观察对象实例
