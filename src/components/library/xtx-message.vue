@@ -2,7 +2,7 @@
   <transition name="down">
     <div class="xtx-message" :style="style[type]" v-if="isShow">
       <i class="iconfont" :class="[style[type].icon]"></i>
-      <span class="text">{{ messageText }}</span>
+      <span class="text">{{ text }}</span>
     </div>
   </transition>
 </template>
@@ -17,7 +17,7 @@ export default {
       type: String,
       default: 'warn'
     },
-    messageText: {
+    text: {
       type: String,
       default: ''
     }
