@@ -98,11 +98,12 @@
 </template>
 
 <script>
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, onUnmounted } from 'vue'
 import { Form, Field } from 'vee-validate'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
-import { userAccountLogin } from '@/api/user'
+import { useIntervalFn } from '@vueuse/core'
+import { userAccountLogin, userMobileLogin, userMobileLoginMsg } from '@/api/user'
 import veeValidateSchema from '@/utils/vee-validate-schema'
 import Message from '@/components/library/Message'
 
@@ -141,6 +142,36 @@ export default {
       mobile: veeValidateSchema.mobile,
       code: veeValidateSchema.code
     }
+    // pause 暂停 resume 开始
+    // useIntervalFn(回调函数,执行间隔,是否立即开启)
+    const time = ref(0)
+    const { pause, resume } = useIntervalFn(() => {
+      time.value--
+      if (time.value <= 0) {
+        pause()
+      }
+    }, 1000, { immediate: false })
+    // 组件销毁时暂停
+    onUnmounted(() => {
+      pause()
+    })
+    // 发送验证码
+    const send = async () => {
+      const valid = mySchema.mobile(form.mobile)
+      if (valid) {
+        // 当 time.value = 0 时才发送验证码
+        if (time.value === 0) {
+          await userMobileLoginMsg(form.mobile)
+          Message({ type: 'success', text: '发送成功' })
+          time.value = 60
+          // 开始计时
+          resume()
+        }
+      } else {
+        // 失败，使用vee的错误函数显示错误信息 setFieldError(字段,错误信息)
+        formCom.value.setFieldError('mobile', valid)
+      }
+    }
     // 使用store
     const store = useStore()
     // 使用router
@@ -167,10 +198,18 @@ export default {
               Message({ type: 'error', text: e.response.data.message || '登录失败' })
             }
           })
+        } else {
+          // 短信登录
+          userMobileLogin(form).then(data => {
+            const { id, account, nickname, avatar, token, mobile } = data.result
+            store.commit('user/setUser', { id, account, nickname, avatar, token, mobile })
+            Message({ type: 'success', text: '登录成功' })
+            router.push(route.query.redirectUrl || '/')
+          })
         }
       }
     }
-    return { isMsg, form, veeValidateSchema, formCom, mySchema, login }
+    return { isMsg, form, veeValidateSchema, formCom, mySchema, login, send }
   }
 }
 </script>
