@@ -100,7 +100,11 @@
 <script>
 import { ref, reactive, watch } from 'vue'
 import { Form, Field } from 'vee-validate'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
+import { userAccountLogin } from '@/api/user'
 import veeValidateSchema from '@/utils/vee-validate-schema'
+import Message from '@/components/library/Message'
 
 export default {
   name: 'LoginForm',
@@ -137,9 +141,34 @@ export default {
       mobile: veeValidateSchema.mobile,
       code: veeValidateSchema.code
     }
-    // 点击登录时校验表单
-    const login = () => {
-      formCom.value.validate().then(valid => valid)
+    // 使用store
+    const store = useStore()
+    // 使用router
+    const router = useRouter()
+    // 使用route
+    const route = useRoute()
+    // 登录提交
+    const login = async () => {
+      const valid = formCom.value.validate()
+      if (valid) {
+        if (!isMsg.value) {
+          userAccountLogin(form).then(data => {
+            // 存储信息
+            // console.log(data.result)
+            const { id, account, nickname, avatar, token, mobile } = data.result
+            store.commit('user/setUser', { id, account, nickname, avatar, token, mobile })
+            // 提示信息
+            Message({ type: 'success', text: '登录成功' })
+            // 跳转
+            router.push(route.query.redirectUrl || '/')
+          }).catch(e => {
+            console.log(e.response.data)
+            if (e.response.data) {
+              Message({ type: 'error', text: e.response.data.message || '登录失败' })
+            }
+          })
+        }
+      }
     }
     return { isMsg, form, veeValidateSchema, formCom, mySchema, login }
   }
