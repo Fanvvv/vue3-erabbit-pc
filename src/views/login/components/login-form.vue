@@ -63,7 +63,9 @@
               type="text"
               placeholder="请输入验证码"
               :class="{ error: errors.code }"></vee-field>
-            <span class="code">发送验证码</span>
+            <span class="code" @click="send">
+              {{ time === 0 ? '发送验证码' : time + '秒后发送'}}
+            </span>
           </div>
           <div class="error" v-if="errors.code">
             <i class="iconfont icon-warning"></i>{{ errors.code }}
@@ -161,7 +163,18 @@ export default {
       if (valid) {
         // 当 time.value = 0 时才发送验证码
         if (time.value === 0) {
-          await userMobileLoginMsg(form.mobile)
+          try {
+            await userMobileLoginMsg(form.mobile)
+          } catch (e) {
+            // console.log(e.response.data)
+            if (e.response.data.code !== '17008') {
+              Message({ type: 'error', text: e.response.data.message || '发送失败' })
+            }
+            Message({ type: 'success', text: '发送成功' })
+            time.value = 60
+            // 开始计时
+            resume()
+          }
           Message({ type: 'success', text: '发送成功' })
           time.value = 60
           // 开始计时
@@ -209,7 +222,7 @@ export default {
         }
       }
     }
-    return { isMsg, form, veeValidateSchema, formCom, mySchema, login, send }
+    return { isMsg, form, veeValidateSchema, formCom, mySchema, login, time, send }
   }
 }
 </script>
