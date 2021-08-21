@@ -23,7 +23,7 @@
         <!-- 商品数量按钮 -->
         <xtx-numbox label="数量" v-model="num" :max="goods.inventory"></xtx-numbox>
         <!-- 加入购物车按钮 -->
-        <xtx-button type="primary" style="margin-top: 20px">加入购物车</xtx-button>
+        <xtx-button type="primary" style="margin-top: 20px" @click="insertCart()">加入购物车</xtx-button>
       </div>
     </div>
     <!-- 商品推荐 -->
@@ -51,7 +51,9 @@
 <script>
 import { ref, watch, nextTick, provide } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import { findGoods } from '@/api/product'
+import Message from '@/components/library/Message'
 import GoodsRelevant from './components/goods-relevant'
 import GoodsImage from './components/goods-image'
 import GoodsSales from './components/goods-sales'
@@ -85,9 +87,37 @@ export default {
         goods.value.oldPrice = sku.oldPrice
         goods.value.inventory = sku.inventory
       }
+      // 记录选择后的sku，可能有数据，可能没有数据{}
+      currSku.value = sku
     }
     const num = ref(1)
-    return { goods, changeSku, num }
+    // 加入购物车
+    const currSku = ref(null)
+    const store = useStore()
+    const insertCart = () => {
+      if (currSku.value && currSku.value.skuId) {
+        const { skuId, specsText: attrsText, inventory: stock } = currSku.value
+        const { id, name, price, mainPictures } = goods.value
+        store.dispatch('cart/insertCart', {
+          skuId,
+          attrsText,
+          stock,
+          id,
+          name,
+          price,
+          nowPrice: price,
+          picture: mainPictures[0],
+          selected: true,
+          isEffective: true,
+          count: num.value
+        }).then(() => {
+          Message({ type: 'success', text: '加入购物车成功' })
+        })
+      } else {
+        Message({ type: 'warn', text: '请选择完整规格' })
+      }
+    }
+    return { goods, changeSku, num, insertCart }
   }
 }
 const useGoods = () => {
