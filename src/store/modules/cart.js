@@ -1,4 +1,6 @@
 // 购物车模块
+import { getNewCartGoods } from '@/api/cart'
+
 export default {
   namespaced: true,
   state () {
@@ -18,6 +20,16 @@ export default {
         state.list.splice(index, 1)
       }
       state.list.unshift(payload)
+    },
+    // 修改购物车商品
+    updateCart (state, goods) {
+      // goods中字段有可能不完整，goods有的信息才去修改
+      const updateGoods = state.list.find(item => item.skuId === goods.skuId)
+      for (const key in goods) {
+        if (goods[key] !== null && goods[key] !== undefined && goods[key] !== '') {
+          updateGoods[key] = goods[key]
+        }
+      }
     }
   },
   actions: {
@@ -29,6 +41,29 @@ export default {
           // 未登录
           ctx.commit('insertCart', payload)
           resolve()
+        }
+      })
+    },
+    // 获取购物车列表
+    findCart (ctx) {
+      return new Promise((resolve, reject) => {
+        if (ctx.rootState.user.profile.token) {
+          // 已登录
+        } else {
+          // 未登录
+          const promiseArr = ctx.state.list.map(item => {
+            return getNewCartGoods(item.skuId)
+          })
+          // Promise.all() 可以并列发送多个请求，等所有请求成功，调用then
+          // Promise.race() 可以并列发送多个请求，等最快的请求成功，调用then
+          Promise.all(promiseArr).then(dataArr => {
+            dataArr.forEach((data, index) => {
+              ctx.store.commit('updateCart', { skuId: ctx.state.list[index].skuId, ...data.result })
+            })
+            resolve()
+          }).catch(e => {
+            reject(e)
+          })
         }
       })
     }

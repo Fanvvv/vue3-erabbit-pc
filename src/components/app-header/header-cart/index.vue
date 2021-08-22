@@ -32,8 +32,14 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
+
 export default {
-  name: 'HeaderCart'
+  name: 'HeaderCart',
+  setup () {
+    const store = useStore()
+    store.dispatch('cart/findCart')
+  }
 }
 </script>
 
