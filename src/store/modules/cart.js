@@ -63,7 +63,7 @@ export default {
           // Promise.race() 可以并列发送多个请求，等最快的请求成功，调用then
           Promise.all(promiseArr).then(dataArr => {
             dataArr.forEach((data, index) => {
-              ctx.store.commit('updateCart', { skuId: ctx.state.list[index].skuId, ...data.result })
+              ctx.commit('updateCart', { skuId: ctx.state.list[index].skuId, ...data.result })
             })
             resolve()
           }).catch(e => {
