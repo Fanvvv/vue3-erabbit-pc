@@ -1,7 +1,7 @@
 <template>
-<div class="xtx-button ellipsis" :class="[size, type]">
+<button class="xtx-button ellipsis" :class="[size, type]">
   <slot></slot>
-</div>
+</button>
 </template>
 
 <script>
@@ -38,7 +38,6 @@ export default {
 .middle {
   width: 180px;
   height: 50px;
-  line-height: 50px;
   font-size: 16px;
 }
 .small {
