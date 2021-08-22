@@ -7,22 +7,25 @@
       <i class="iconfont icon-search"></i>
       <input type="text" placeholder="搜一搜">
     </div>
-    <div class="cart">
-      <a href="#" class="curr">
-        <i class="iconfont icon-cart"></i>
-        <em>2</em>
-      </a>
-    </div>
+<!--    <div class="cart">-->
+<!--      <a href="#" class="curr">-->
+<!--        <i class="iconfont icon-cart"></i>-->
+<!--        <em>2</em>-->
+<!--      </a>-->
+<!--    </div>-->
+    <header-cart></header-cart>
   </div>
 </header>
 </template>
 
 <script>
 import HeaderNav from './header-nav'
+import HeaderCart from './header-cart'
 export default {
   name: 'AppHeader',
   components: {
-    HeaderNav
+    HeaderNav,
+    HeaderCart
   }
 }
 </script>
