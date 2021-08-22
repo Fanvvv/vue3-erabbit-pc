@@ -1,12 +1,12 @@
 <template>
   <div class="cart">
-    <a class="curr" href="javascript:;">
+    <router-link class="curr" to="/cart">
       <i class="iconfont icon-cart"></i><em>{{ $store.getters['cart/validTotal'] }}</em>
-    </a>
+    </router-link>
     <div class="layer" v-if="$store.getters['cart/validTotal'] && $route.path !== '/cart'">
       <div class="list">
         <div class="item" v-for="item in $store.getters['cart/validList']" :key="item.id">
-          <RouterLink to="">
+          <router-link :to="`/product/${item.id}`">
             <img :src="item.picture" alt="">
             <div class="center">
               <p class="name ellipsis-2">{{ item.name }}</p>
@@ -14,9 +14,9 @@
             </div>
             <div class="right">
               <p class="price">&yen;{{ item.nowPrice }}</p>
-              <p class="count">{{ item.count }}</p>
+              <p class="count">x{{ item.count }}</p>
             </div>
-          </RouterLink>
+          </router-link>
           <i class="iconfont icon-close-new" @click="deleteCart(item.skuId)"></i>
         </div>
       </div>
@@ -25,7 +25,7 @@
           <p>共 {{ $store.getters['cart/validTotal'] }} 件商品</p>
           <p>&yen;{{ $store.getters['cart/validAmount'] }}</p>
         </div>
-        <xtx-button type="plain">去购物车结算</xtx-button>
+        <xtx-button type="plain" @click="$router.push('/cart')">去购物车结算</xtx-button>
       </div>
     </div>
   </div>
