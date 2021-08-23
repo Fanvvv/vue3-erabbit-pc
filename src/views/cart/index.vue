@@ -26,6 +26,11 @@
           </thead>
           <!-- 有效商品 -->
           <tbody>
+          <tr v-if="$store.getters['cart/validList'].length === 0">
+            <td colspan="6">
+              <cart-none></cart-none>
+            </td>
+          </tr>
           <tr v-for="item in $store.getters['cart/validList']" :key="item.skuId">
             <td>
               <xtx-checkbox
@@ -121,12 +126,14 @@
 
 <script>
 import { useStore } from 'vuex'
-import GoodsRelevant from '@/views/goods/components/goods-relevant'
 import Message from '@/components/library/Message'
+import GoodsRelevant from '@/views/goods/components/goods-relevant'
+import CartNone from './components/cart-none'
 export default {
   name: 'CartPage',
   components: {
-    GoodsRelevant
+    GoodsRelevant,
+    CartNone
   },
   setup () {
     const store = useStore()
