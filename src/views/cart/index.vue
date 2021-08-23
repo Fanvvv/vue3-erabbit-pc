@@ -9,7 +9,7 @@
         <table>
           <thead>
           <tr>
-            <th width="120"><xtx-checkbox>全选</xtx-checkbox></th>
+            <th width="120"><xtx-checkbox :modelValue="$store.getters['cart/isCheckAll']">全选</xtx-checkbox></th>
             <th width="400">商品信息</th>
             <th width="220">单价</th>
             <th width="180">数量</th>
@@ -19,26 +19,30 @@
           </thead>
           <!-- 有效商品 -->
           <tbody>
-          <tr v-for="i in 3" :key="i">
-            <td><xtx-checkbox></xtx-checkbox></td>
+          <tr v-for="item in $store.getters['cart/validList']" :key="item.skuId">
+            <td><xtx-checkbox :modelValue="item.selected"></xtx-checkbox></td>
             <td>
               <div class="goods">
-                <router-link to="/"><img src="https://yanxuan-item.nosdn.127.net/13ab302f8f2c954d873f03be36f8fb03.png" alt=""></router-link>
+                <router-link :to="`/product/${item.id}`">
+                  <img :src="item.picture"  alt="">
+                </router-link>
                 <div>
-                  <p class="name ellipsis">和手足干裂说拜拜 ingrams手足皲裂修复霜</p>
+                  <p class="name ellipsis">{{ item.name }}</p>
                   <!-- 选择规格组件 -->
-                  <p class="attr">颜色：白色柠檬（防污） 尺码：160cm</p>
+                  <p class="attr">{{ item.attrsText }}</p>
                 </div>
               </div>
             </td>
             <td class="tc">
-              <p>&yen;200.00</p>
-              <p>比加入时降价 <span class="red">&yen;20.00</span></p>
+              <p>&yen;{{ item.nowPrice }}</p>
+              <p v-if="item.price - item.nowPrice > 0">
+                比加入时降价 <span class="red">&yen;{{ item.price - item.nowPrice }}</span>
+              </p>
             </td>
             <td class="tc">
-              <xtx-numbox></xtx-numbox>
+              <xtx-numbox :modelValue="item.count"></xtx-numbox>
             </td>
-            <td class="tc"><p class="f16 red">&yen;200.00</p></td>
+            <td class="tc"><p class="f16 red">&yen;{{ item.nowPrice * 100 * item.count / 100 }}</p></td>
             <td class="tc">
               <p><a href="javascript:;">移入收藏夹</a></p>
               <p><a class="green" href="javascript:;">删除</a></p>
@@ -47,22 +51,24 @@
           </tr>
           </tbody>
           <!-- 无效商品 -->
-          <tbody>
+          <tbody v-if="$store.getters['cart/invalidList'].length > 0">
           <tr><td colspan="6"><h3 class="tit">失效商品</h3></td></tr>
-          <tr v-for="i in 3" :key="i">
-            <td><xtx-checkbox style="color:#eee;"></xtx-checkbox></td>
+          <tr v-for="item in $store.getters['cart/validList']" :key="item.skuId">
+            <td><xtx-checkbox style="color: #eee;"></xtx-checkbox></td>
             <td>
               <div class="goods">
-                <router-link to="/"><img src="https://yanxuan-item.nosdn.127.net/13ab302f8f2c954d873f03be36f8fb03.png" alt=""></router-link>
+                <router-link :to="`/product/${item.id}`">
+                  <img :src="item.picture" alt="">
+                </router-link>
                 <div>
-                  <p class="name ellipsis">和手足干裂说拜拜 ingrams手足皲裂修复霜</p>
-                  <p class="attr">颜色：粉色 尺寸：14cm 产地：中国</p>
+                  <p class="name ellipsis">{{ item.name }}</p>
+                  <p class="attr">{{ item.attrsText }}</p>
                 </div>
               </div>
             </td>
-            <td class="tc"><p>&yen;200.00</p></td>
-            <td class="tc">1</td>
-            <td class="tc"><p>&yen;200.00</p></td>
+            <td class="tc"><p>&yen;{{ item.nowPrice }}</p></td>
+            <td class="tc">{{ item.count }}</td>
+            <td class="tc"><p>&yen;{{ item.nowPrice * 100 * item.count / 100 }}</p></td>
             <td class="tc">
               <p><a class="green" href="javascript:;">删除</a></p>
               <p><a href="javascript:;">找相似</a></p>
@@ -74,14 +80,14 @@
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          <xtx-checkbox>全选</xtx-checkbox>
+          <xtx-checkbox :modelValue="$store.getters['cart/isCheckAll']">全选</xtx-checkbox>
           <a href="javascript:;">删除商品</a>
           <a href="javascript:;">移入收藏夹</a>
           <a href="javascript:;">清空失效商品</a>
         </div>
         <div class="total">
-          共 7 件商品，已选择 2 件，商品合计：
-          <span class="red">¥400</span>
+          共 {{$store.getters['cart/validTotal']}} 件商品，已选择 {{$store.getters['cart/selectedTotal']}} 件，商品合计：
+          <span class="red">&yen;{{$store.getters['cart/selectedAmount']}}</span>
           <xtx-button type="primary">下单结算</xtx-button>
         </div>
       </div>
