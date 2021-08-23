@@ -20,7 +20,13 @@
           <!-- 有效商品 -->
           <tbody>
           <tr v-for="item in $store.getters['cart/validList']" :key="item.skuId">
-            <td><xtx-checkbox :modelValue="item.selected"></xtx-checkbox></td>
+            <td>
+              <xtx-checkbox
+                v-model="item.selected"
+                @change="$store.dispatch('cart/updateCart', item)"
+              >
+              </xtx-checkbox>
+            </td>
             <td>
               <div class="goods">
                 <router-link :to="`/product/${item.id}`">
