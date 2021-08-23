@@ -9,7 +9,14 @@
         <table>
           <thead>
           <tr>
-            <th width="120"><xtx-checkbox :modelValue="$store.getters['cart/isCheckAll']">全选</xtx-checkbox></th>
+            <th width="120">
+              <xtx-checkbox
+                :modelValue="$store.getters['cart/isCheckAll']"
+                @change="checkAllBtn"
+              >
+                全选
+              </xtx-checkbox>
+            </th>
             <th width="400">商品信息</th>
             <th width="220">单价</th>
             <th width="180">数量</th>
@@ -90,7 +97,12 @@
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          <xtx-checkbox :modelValue="$store.getters['cart/isCheckAll']">全选</xtx-checkbox>
+          <xtx-checkbox
+            :modelValue="$store.getters['cart/isCheckAll']"
+            @change="checkAllBtn"
+          >
+            全选
+          </xtx-checkbox>
           <a href="javascript:;">删除商品</a>
           <a href="javascript:;">移入收藏夹</a>
           <a href="javascript:;">清空失效商品</a>
@@ -108,11 +120,19 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
 import GoodsRelevant from '@/views/goods/components/goods-relevant'
 export default {
   name: 'CartPage',
   components: {
     GoodsRelevant
+  },
+  setup () {
+    const store = useStore()
+    const checkAllBtn = (selected) => {
+      store.dispatch('cart/checkAllCart', selected)
+    }
+    return { checkAllBtn }
   }
 }
 </script>

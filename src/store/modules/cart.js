@@ -95,6 +95,20 @@ export default {
           resolve()
         }
       })
+    },
+    // 全选商品
+    checkAllCart (ctx, selected) {
+      return new Promise((resolve, reject) => {
+        if (ctx.rootState.user.profile.token) {
+          // 已登录
+        } else {
+          // 未登录
+          ctx.getters.validList.forEach(item => {
+            ctx.commit('updateCart', { skuId: item.skuId, selected })
+          })
+          resolve()
+        }
+      })
     }
   },
   getters: {
