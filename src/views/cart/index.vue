@@ -62,7 +62,7 @@
             <td class="tc"><p class="f16 red">&yen;{{ item.nowPrice * 100 * item.count / 100 }}</p></td>
             <td class="tc">
               <p><a href="javascript:;">移入收藏夹</a></p>
-              <p><a class="green" href="javascript:;">删除</a></p>
+              <p><a class="green" href="javascript:;" @click="deleteBtn(item.skuId)">删除</a></p>
               <p><a href="javascript:;">找相似</a></p>
             </td>
           </tr>
@@ -87,7 +87,7 @@
             <td class="tc">{{ item.count }}</td>
             <td class="tc"><p>&yen;{{ item.nowPrice * 100 * item.count / 100 }}</p></td>
             <td class="tc">
-              <p><a class="green" href="javascript:;">删除</a></p>
+              <p><a class="green" href="javascript:;" @click="deleteBtn(item.skuId)">删除</a></p>
               <p><a href="javascript:;">找相似</a></p>
             </td>
           </tr>
@@ -122,6 +122,7 @@
 <script>
 import { useStore } from 'vuex'
 import GoodsRelevant from '@/views/goods/components/goods-relevant'
+import Message from '@/components/library/Message'
 export default {
   name: 'CartPage',
   components: {
@@ -129,10 +130,17 @@ export default {
   },
   setup () {
     const store = useStore()
+    // 全选
     const checkAllBtn = (selected) => {
       store.dispatch('cart/checkAllCart', selected)
     }
-    return { checkAllBtn }
+    // 删除
+    const deleteBtn = (skuId) => {
+      store.dispatch('cart/deleteCart', skuId).then(() => {
+        Message({ type: 'success', text: '删除成功' })
+      })
+    }
+    return { checkAllBtn, deleteBtn }
   }
 }
 </script>
