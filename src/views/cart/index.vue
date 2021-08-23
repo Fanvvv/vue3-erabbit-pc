@@ -40,7 +40,11 @@
               </p>
             </td>
             <td class="tc">
-              <xtx-numbox :modelValue="item.count"></xtx-numbox>
+              <xtx-numbox
+                v-model="item.count"
+                :max="item.stock"
+                @change="$store.dispatch('cart/updateCart', item)">
+              </xtx-numbox>
             </td>
             <td class="tc"><p class="f16 red">&yen;{{ item.nowPrice * 100 * item.count / 100 }}</p></td>
             <td class="tc">
