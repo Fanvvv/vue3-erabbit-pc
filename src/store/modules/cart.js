@@ -111,13 +111,13 @@ export default {
       })
     },
     // 批量删除选中商品
-    batchDeleteCart (ctx) {
+    batchDeleteCart (ctx, isClear) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
           // 已登录
         } else {
           // 未登录
-          ctx.getters.selectedList.forEach(item => {
+          ctx.getters[isClear ? 'invalidList' : 'selectedList'].forEach(item => {
             ctx.commit('deleteCart', item.skuId)
           })
           resolve()

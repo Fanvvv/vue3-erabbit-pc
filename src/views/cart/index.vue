@@ -110,7 +110,7 @@
           </xtx-checkbox>
           <a href="javascript:;" @click="batchDeleteBtn()">删除商品</a>
           <a href="javascript:;">移入收藏夹</a>
-          <a href="javascript:;">清空失效商品</a>
+          <a href="javascript:;" @click="batchDeleteBtn(true)">清空失效商品</a>
         </div>
         <div class="total">
           共 {{$store.getters['cart/validTotal']}} 件商品，已选择 {{$store.getters['cart/selectedTotal']}} 件，商品合计：
@@ -153,9 +153,9 @@ export default {
       })
     }
     // 批量删除
-    const batchDeleteBtn = () => {
-      Confirm({ text: '您确定从购物车删除选中的商品吗？' }).then(() => {
-        store.dispatch('cart/batchDeleteCart').then(() => {
+    const batchDeleteBtn = (isClear) => {
+      Confirm({ text: `您确定从购物车删除${isClear ? '失效' : '选中'}的商品吗？` }).then(() => {
+        store.dispatch('cart/batchDeleteCart', isClear).then(() => {
           Message({ type: 'success', text: '删除成功' })
         })
       }).catch(e => {
