@@ -47,7 +47,11 @@
                 <div>
                   <p class="name ellipsis">{{ item.name }}</p>
                   <!-- 选择规格组件 -->
-                  <p class="attr">{{ item.attrsText }}</p>
+                  <cart-sku
+                    :attrs-text="item.attrsText"
+                    :sku-id="item.skuId"
+                    @change="($event) => updateCartSku(item.skuId, $event)"
+                  ></cart-sku>
                 </div>
               </div>
             </td>
@@ -130,11 +134,13 @@ import Message from '@/components/library/Message'
 import Confirm from '@/components/library/Confirm'
 import GoodsRelevant from '@/views/goods/components/goods-relevant'
 import CartNone from './components/cart-none'
+import CartSku from './components/cart-sku'
 export default {
   name: 'CartPage',
   components: {
     GoodsRelevant,
-    CartNone
+    CartNone,
+    CartSku
   },
   setup () {
     const store = useStore()
@@ -162,7 +168,11 @@ export default {
         return e
       })
     }
-    return { checkAllBtn, deleteBtn, batchDeleteBtn }
+    // 修改规格
+    const updateCartSku = (oldSkuId, newSku) => {
+      store.dispatch('cart/updateCartSku', { oldSkuId, newSku })
+    }
+    return { checkAllBtn, deleteBtn, batchDeleteBtn, updateCartSku }
   }
 }
 </script>
