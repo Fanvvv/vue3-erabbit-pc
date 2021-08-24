@@ -201,10 +201,12 @@ export default {
             // console.log(data.result)
             const { id, account, nickname, avatar, token, mobile } = data.result
             store.commit('user/setUser', { id, account, nickname, avatar, token, mobile })
-            // 提示信息
-            Message({ type: 'success', text: '登录成功' })
-            // 跳转
-            router.push(route.query.redirectUrl || '/')
+            store.dispatch('cart/mergeLocalCart').then(() => {
+              // 提示信息
+              Message({ type: 'success', text: '登录成功' })
+              // 跳转
+              router.push(route.query.redirectUrl || '/')
+            })
           }).catch(e => {
             console.log(e.response.data)
             if (e.response.data) {

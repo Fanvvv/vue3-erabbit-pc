@@ -1,5 +1,5 @@
 // 购物车模块
-import { getNewCartGoods } from '@/api/cart'
+import { getNewCartGoods, mergeLocalCart } from '@/api/cart'
 
 export default {
   namespaced: true,
@@ -35,6 +35,10 @@ export default {
     deleteCart (state, skuId) {
       const deleteIndex = state.list.findIndex(item => item.skuId === skuId)
       state.list.splice(deleteIndex, 1)
+    },
+    // 设置购物车列表
+    setCartList (state, list) {
+      state.list = list
     }
   },
   actions: {
@@ -144,6 +148,16 @@ export default {
           resolve()
         }
       })
+    },
+    // 合并本地购物车
+    async mergeLocalCart (store) {
+      // 存储token后调用合并API接口函数进行购物合并
+      const cartList = store.getters.validList.map(({ skuId, selected, count }) => {
+        return { skuId, selected, count }
+      })
+      await mergeLocalCart(cartList)
+      // 合并成功将本地购物车删除
+      store.commit('setCartList', [])
     }
   },
   getters: {
