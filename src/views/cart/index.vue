@@ -127,6 +127,7 @@
 <script>
 import { useStore } from 'vuex'
 import Message from '@/components/library/Message'
+import Confirm from '@/components/library/Confirm'
 import GoodsRelevant from '@/views/goods/components/goods-relevant'
 import CartNone from './components/cart-none'
 export default {
@@ -143,14 +144,22 @@ export default {
     }
     // 删除
     const deleteBtn = (skuId) => {
-      store.dispatch('cart/deleteCart', skuId).then(() => {
-        Message({ type: 'success', text: '删除成功' })
+      Confirm({ text: '您确定从购物车删除该商品吗？' }).then(() => {
+        store.dispatch('cart/deleteCart', skuId).then(() => {
+          Message({ type: 'success', text: '删除成功' })
+        })
+      }).catch(e => {
+        return e
       })
     }
     // 批量删除
     const batchDeleteBtn = () => {
-      store.dispatch('cart/batchDeleteCart').then(() => {
-        Message({ type: 'success', text: '删除成功' })
+      Confirm({ text: '您确定从购物车删除选中的商品吗？' }).then(() => {
+        store.dispatch('cart/batchDeleteCart').then(() => {
+          Message({ type: 'success', text: '删除成功' })
+        })
+      }).catch(e => {
+        return e
       })
     }
     return { checkAllBtn, deleteBtn, batchDeleteBtn }
