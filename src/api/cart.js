@@ -35,3 +35,14 @@ export const mergeLocalCart = (cartList) => {
     cartList
   )
 }
+
+/**
+ * 获取登录后的购物车列表
+ * @returns Promise
+ */
+export const findCartList = () => {
+  return request(
+    '/member/cart',
+    'get'
+  )
+}
