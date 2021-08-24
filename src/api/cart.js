@@ -23,3 +23,15 @@ export const getSpecsAndSkus = (id) => {
     'get'
   )
 }
+
+/**
+ * 合并本地购物车
+ * @param {Array<object>} cartList - 本地购物车数组
+ */
+export const mergeLocalCart = (cartList) => {
+  return request(
+    '/member/cart/merge',
+    'post',
+    cartList
+  )
+}
