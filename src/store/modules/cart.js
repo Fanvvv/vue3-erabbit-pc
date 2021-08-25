@@ -1,5 +1,12 @@
 // 购物车模块
-import { deleteCart, findCartList, getNewCartGoods, insertCart, mergeLocalCart } from '@/api/cart'
+import {
+  deleteCart,
+  findCartList,
+  getNewCartGoods,
+  insertCart,
+  mergeLocalCart,
+  updateCart
+} from '@/api/cart'
 
 export default {
   namespaced: true,
@@ -109,6 +116,12 @@ export default {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
           // 已登录
+          updateCart(goods).then(() => {
+            return findCartList()
+          }).then(({ result }) => {
+            ctx.commit('setCartList', result)
+            resolve()
+          })
         } else {
           // 未登录
           ctx.commit('updateCart', goods)
