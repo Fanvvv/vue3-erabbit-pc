@@ -5,7 +5,8 @@ import {
   getNewCartGoods,
   insertCart,
   mergeLocalCart,
-  updateCart
+  updateCart,
+  checkAllCart
 } from '@/api/cart'
 
 export default {
@@ -134,6 +135,13 @@ export default {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
           // 已登录
+          const ids = ctx.getters.validList.map(item => item.skuId)
+          checkAllCart({ selected, ids }).then(() => {
+            return findCartList()
+          }).then(({ result }) => {
+            ctx.commit('setCartList', result)
+            resolve()
+          })
         } else {
           // 未登录
           ctx.getters.validList.forEach(item => {
