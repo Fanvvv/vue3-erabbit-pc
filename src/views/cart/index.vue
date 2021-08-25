@@ -119,7 +119,7 @@
         <div class="total">
           共 {{$store.getters['cart/validTotal']}} 件商品，已选择 {{$store.getters['cart/selectedTotal']}} 件，商品合计：
           <span class="red">&yen;{{$store.getters['cart/selectedAmount']}}</span>
-          <xtx-button type="primary">下单结算</xtx-button>
+          <xtx-button type="primary" @click="goCheckout">下单结算</xtx-button>
         </div>
       </div>
       <!-- 猜你喜欢 -->
@@ -130,6 +130,7 @@
 
 <script>
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import Message from '@/components/library/Message'
 import Confirm from '@/components/library/Confirm'
 import GoodsRelevant from '@/views/goods/components/goods-relevant'
@@ -172,7 +173,23 @@ export default {
     const updateCartSku = (oldSkuId, newSku) => {
       store.dispatch('cart/updateCartSku', { oldSkuId, newSku })
     }
-    return { checkAllBtn, deleteBtn, batchDeleteBtn, updateCartSku }
+    // 下单结算
+    const router = useRouter()
+    const goCheckout = () => {
+      // 1. 判断是否选择有效商品
+      // 2. 判断是否已经登录，未登录 弹窗提示
+      // 3. 进行跳转 （需要做访问权限控制）
+      if (store.getters['cart/selectedTotal'] === 0) return Message({ text: '至少选中一件商品才能结算' })
+      if (!store.state.user.profile.token) {
+        Confirm({ text: '下单结算需要登录，您是否去登录？' }).then(() => {
+          // 点击确认
+          router.push('/member/checkout')
+        }).catch(e => {})
+      } else {
+        router.push('/member/checkout')
+      }
+    }
+    return { checkAllBtn, deleteBtn, batchDeleteBtn, updateCartSku, goCheckout }
   }
 }
 </script>
