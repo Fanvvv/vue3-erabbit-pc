@@ -10,9 +10,16 @@
       <a v-if="showAddress" href="javascript:;">修改地址</a>
     </div>
     <div class="action">
-      <xtx-button class="btn">切换地址</xtx-button>
+      <xtx-button class="btn" @click="dialogVisible=true">切换地址</xtx-button>
       <xtx-button class="btn">添加地址</xtx-button>
     </div>
+    <xtx-dialog title="切换收货地址" v-model="dialogVisible">
+      <span>内容</span>
+      <template #footer>
+        <xtx-button style="margin-right:20px" type="gray" @click="dialogVisible = false">取消</xtx-button>
+        <xtx-button type="primary" @click="dialogVisible = false">确认</xtx-button>
+      </template>
+    </xtx-dialog>
   </div>
 </template>
 
@@ -39,7 +46,9 @@ export default {
         showAddress.value = props.list[0]
       }
     }
-    return { showAddress }
+    // 对话框显示隐藏
+    const dialogVisible = ref(false)
+    return { showAddress, dialogVisible }
   }
 }
 </script>
