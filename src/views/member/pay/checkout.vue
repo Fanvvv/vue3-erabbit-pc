@@ -10,21 +10,7 @@
         <!-- 收货地址 -->
         <h3 class="box-title">收货地址</h3>
         <div class="box-body">
-          <div class="address">
-            <div class="text">
-              <!-- <div class="none">您需要先添加收货地址才可提交订单。</div> -->
-              <ul>
-                <li><span>收<i/>货<i/>人：</span>朱超</li>
-                <li><span>联系方式：</span>132****2222</li>
-                <li><span>收货地址：</span>海南省三亚市解放路108号物质大厦1003室</li>
-              </ul>
-              <a href="javascript:;">修改地址</a>
-            </div>
-            <div class="action">
-              <XtxButton class="btn">切换地址</XtxButton>
-              <XtxButton class="btn">添加地址</XtxButton>
-            </div>
-          </div>
+          <checkout-address></checkout-address>
         </div>
         <!-- 商品信息 -->
         <h3 class="box-title">商品信息</h3>
@@ -92,8 +78,13 @@
 </template>
 
 <script>
+import CheckoutAddress from './components/checkout-address'
+
 export default {
-  name: 'PayCheckout'
+  name: 'PayCheckout',
+  components: {
+    CheckoutAddress
+  }
 }
 </script>
 
