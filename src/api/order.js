@@ -28,7 +28,7 @@ export const addAddress = (address) => {
  */
 export const editAddress = (address) => {
   return request(
-    '/member/address',
+    `/member/address/${address.id}`,
     'put',
     address
   )

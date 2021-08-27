@@ -7,11 +7,11 @@
         <li><span>联系方式：</span>{{ showAddress.contact }}</li>
         <li><span>收货地址：</span>{{ showAddress.fullLocation.replace(/ /g, '') + showAddress.address }}</li>
       </ul>
-      <a v-if="showAddress" href="javascript:;">修改地址</a>
+      <a v-if="showAddress" href="javascript:;" @click="openAddressEdit(showAddress)">修改地址</a>
     </div>
     <div class="action">
       <xtx-button class="btn" @click="openDialog">切换地址</xtx-button>
-      <xtx-button class="btn" @click="openAddressEdit()">添加地址</xtx-button>
+      <xtx-button class="btn" @click="openAddressEdit({})">添加地址</xtx-button>
     </div>
     <xtx-dialog title="切换收货地址" v-model="dialogVisible">
       <div
@@ -87,14 +87,21 @@ export default {
     }
     // 添加地址组件
     const addressEditCom = ref(null)
-    const openAddressEdit = () => {
-      addressEditCom.value.open()
+    const openAddressEdit = (address) => {
+      addressEditCom.value.open(address)
     }
     // 成功
     const handleSuccess = (formData) => {
-      const json = JSON.stringify(formData) // 需要克隆下，不然使用的是对象的引用
-      // eslint-disable-next-line vue/no-mutating-props
-      props.list.unshift(JSON.parse(json))
+      const editAddress = props.list.find(item => item.id === formData.id)
+      if (editAddress) {
+        for (const key in editAddress) {
+          editAddress[key] = formData[key]
+        }
+      } else {
+        const json = JSON.stringify(formData) // 需要克隆下，不然使用的是对象的引用
+        // eslint-disable-next-line vue/no-mutating-props
+        props.list.unshift(JSON.parse(json))
+      }
     }
     return {
       showAddress,
