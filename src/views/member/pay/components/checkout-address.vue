@@ -11,7 +11,7 @@
     </div>
     <div class="action">
       <xtx-button class="btn" @click="openDialog">切换地址</xtx-button>
-      <xtx-button class="btn">添加地址</xtx-button>
+      <xtx-button class="btn" @click="openAddressEdit()">添加地址</xtx-button>
     </div>
     <xtx-dialog title="切换收货地址" v-model="dialogVisible">
       <div
@@ -33,13 +33,18 @@
       </template>
     </xtx-dialog>
   </div>
+  <address-edit ref="addressEditCom" @on-success="handleSuccess"></address-edit>
 </template>
 
 <script>
 import { ref } from 'vue'
+import AddressEdit from './address-edit'
 
 export default {
   name: 'CheckoutAddress',
+  components: {
+    AddressEdit
+  },
   props: {
     list: {
       type: Array,
@@ -80,12 +85,54 @@ export default {
       // 默认通知一个地址ID给父
       emit('change', showAddress.value?.id)
     }
-    return { showAddress, dialogVisible, openDialog, confirmAddress, selectedAddress }
+    // 添加地址组件
+    const addressEditCom = ref(null)
+    const openAddressEdit = () => {
+      addressEditCom.value.open()
+    }
+    // 成功
+    const handleSuccess = (formData) => {
+      const json = JSON.stringify(formData) // 需要克隆下，不然使用的是对象的引用
+      // eslint-disable-next-line vue/no-mutating-props
+      props.list.unshift(JSON.parse(json))
+    }
+    return {
+      showAddress,
+      dialogVisible,
+      openDialog,
+      confirmAddress,
+      selectedAddress,
+      addressEditCom,
+      openAddressEdit,
+      handleSuccess
+    }
   }
 }
 </script>
 
 <style scoped lang="less">
+.xtx-dialog {
+  .text {
+    flex: 1;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    &.item {
+      border: 1px solid #f5f5f5;
+      margin-bottom: 10px;
+      cursor: pointer;
+      &.active,&:hover {
+        border-color: @xtxColor;
+        background: lighten(@xtxColor,50%);
+      }
+      > ul {
+        padding: 10px;
+        font-size: 14px;
+        line-height: 30px;
+      }
+    }
+  }
+}
 .checkout-address {
   border: 1px solid #f5f5f5;
   display: flex;
@@ -135,28 +182,6 @@ export default {
       font-size: 14px;
       &:first-child {
         margin-right: 10px;
-      }
-    }
-  }
-}
-.xtx-dialog {
-  .text {
-    flex: 1;
-    min-height: 90px;
-    display: flex;
-    align-items: center;
-    &.item {
-      border: 1px solid #f5f5f5;
-      margin-bottom: 10px;
-      cursor: pointer;
-      &.active,&:hover {
-        border-color: @xtxColor;
-        background: lighten(@xtxColor,50%);
-      }
-      > ul {
-        padding: 10px;
-        font-size: 14px;
-        line-height: 30px;
       }
     }
   }
