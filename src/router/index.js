@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import store from '@/store'
+import { h } from 'vue'
 
 const routes = [
   {
@@ -42,6 +43,21 @@ const routes = [
           {
             path: '/member',
             component: () => import('@/views/member/home')
+          },
+          // vue3.0 需要有嵌套关系才能模糊匹配
+          {
+            path: '/member/order',
+            component: { render: () => h(<router-view></router-view>) },
+            children: [
+              {
+                path: '',
+                component: () => import('@/views/member/order')
+              },
+              {
+                path: ':id',
+                component: () => import('@/views/member/order/components/order-detail')
+              }
+            ]
           }
         ]
       }
