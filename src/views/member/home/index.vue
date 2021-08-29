@@ -4,7 +4,7 @@
     <home-overview></home-overview>
     <!-- 收藏 -->
     <home-panel title="我的收藏">
-      <category-goods v-for="i in 4" :key="i" :goods="goods"></category-goods>
+      <category-goods v-for="item in collectGoods" :key="item.id" :goods="item"></category-goods>
     </home-panel>
     <!-- 足迹 -->
     <home-panel title="我的足迹">
@@ -16,10 +16,12 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import MemberHomeOverview from './components/home-overview'
 import MemberHomePanel from './components/home-panel'
 import GoodsRelevant from '@/views/goods/components/goods-relevant'
 import CategoryGoods from '@/views/category/components/category-goods'
+import { findCollect } from '@/api/mock'
 
 export default {
   name: 'MemberHome',
@@ -37,7 +39,15 @@ export default {
       desc: '清汤鲜香 红汤劲爽',
       price: '159.00'
     }
-    return { goods }
+    const collectGoods = ref([])
+    findCollect({
+      page: 1,
+      pageSize: 4,
+      collectType: 1
+    }).then(({ result }) => {
+      collectGoods.value = result.items
+    })
+    return { goods, collectGoods }
   }
 }
 </script>

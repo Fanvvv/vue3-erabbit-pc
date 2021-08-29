@@ -9,5 +9,7 @@ import 'normalize.css'
 import '@/assets/styles/common.less'
 // 引入自定义组件
 import XtxUI from '@/components/library'
+// 使用 mock 数据
+import '@/mock'
 
 createApp(App).use(store).use(router).use(XtxUI).mount('#app')
