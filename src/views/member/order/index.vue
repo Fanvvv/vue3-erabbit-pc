@@ -1,14 +1,31 @@
 <template>
   <div class="member-order">
-    <h1>订单列表页</h1>
-    <RouterLink to="/member/order/1001">订单1</RouterLink>
-    <RouterLink to="/member/order/1002">订单2</RouterLink>
+    <xtx-tabs v-model="activeName" @click-tab="clickTab">
+      <xtx-tabs-panel
+        v-for="item in orderStatus"
+        :key="item.id"
+        :name="item.name"
+        :label="item.label"
+      >
+        {{ item.label }}
+      </xtx-tabs-panel>
+    </xtx-tabs>
   </div>
 </template>
 
 <script>
+import { ref } from 'vue'
+import { orderStatus } from '@/api/constant/constant'
+
 export default {
-  name: 'MemberOrder'
+  name: 'MemberOrder',
+  setup () {
+    const activeName = ref('all')
+    const clickTab = (name) => {
+      console.log(name)
+    }
+    return { activeName, clickTab, orderStatus }
+  }
 }
 </script>
 
