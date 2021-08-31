@@ -51,7 +51,7 @@
         <xtx-button v-if="order.orderState === 1" type="primary" size="small">立即付款</xtx-button>
         <xtx-button v-if="order.orderState === 3" type="primary" size="small">确认收货</xtx-button>
         <p><a href="javascript:;">查看详情</a></p>
-        <p v-if="order.orderState === 1"><a href="javascript:;">取消订单</a></p>
+        <p v-if="order.orderState === 1" @click="$emit('on-cancel')"><a href="javascript:;">取消订单</a></p>
         <p v-if="[2,3,4,5].includes(order.orderState)"><a href="javascript:;">再次购买</a></p>
         <p v-if="[4,5].includes(order.orderState)"><a href="javascript:;">申请售后</a></p>
       </div>
@@ -71,6 +71,7 @@ export default {
       default: () => ({})
     }
   },
+  emits: ['on-cancel'],
   setup (props) {
     const { start, timeText } = usePayTime()
     if (props.order.countdown > -1) {
