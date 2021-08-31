@@ -18,6 +18,7 @@
         :order="item"
         @on-cancel="onCancelOrder(item)"
         @on-delete="onDeleteOrder(item)"
+        @on-confirm="onConfirmOrder(item)"
       ></order-item>
     </div>
     <!-- 分页 -->
@@ -35,7 +36,7 @@
 <script>
 import { ref, reactive, watch } from 'vue'
 import { orderStatus } from '@/api/constant/constant'
-import { findOrderList, deleteOrder } from '@/api/order'
+import { findOrderList, deleteOrder, confirmOrder } from '@/api/order'
 import OrderItem from './components/order-item'
 import OrderCancel from './components/order-cancel'
 import Confirm from '@/components/library/Confirm'
@@ -99,7 +100,8 @@ export default {
       requestParams,
       total,
       onDeleteOrder,
-      ...useCancelOrder()
+      ...useCancelOrder(),
+      ...useConfirmOrder()
     }
   }
 }
@@ -111,6 +113,20 @@ const useCancelOrder = () => {
     orderCancelCom.value.open(item)
   }
   return { onCancelOrder, orderCancelCom }
+}
+// 封装逻辑-确认收货
+const useConfirmOrder = () => {
+  const onConfirmOrder = (item) => {
+    // item 就是你要确认收货的订单
+    Confirm({ text: '您确认收到货吗？确认后货款将会打给卖家。' }).then(() => {
+      confirmOrder(item.id).then(() => {
+        Message({ text: '确认收货成功', type: 'success' })
+        // 确认收货后状态变成 待评价
+        item.orderState = 4
+      })
+    }).catch(e => {})
+  }
+  return { onConfirmOrder }
 }
 </script>
 
