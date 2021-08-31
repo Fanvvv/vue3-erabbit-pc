@@ -17,6 +17,7 @@
         :key="item.id"
         :order="item"
         @on-cancel="onCancelOrder(item)"
+        @on-delete="onDeleteOrder(item)"
       ></order-item>
     </div>
     <!-- 分页 -->
@@ -34,9 +35,11 @@
 <script>
 import { ref, reactive, watch } from 'vue'
 import { orderStatus } from '@/api/constant/constant'
-import { findOrderList } from '@/api/order'
+import { findOrderList, deleteOrder } from '@/api/order'
 import OrderItem from './components/order-item'
 import OrderCancel from './components/order-cancel'
+import Confirm from '@/components/library/Confirm'
+import Message from '@/components/library/Message'
 
 export default {
   name: 'MemberOrder',
@@ -58,8 +61,8 @@ export default {
     const loading = ref(false)
     // 订单总数
     const total = ref(0)
-    // 查询订单，参数改变时重新发请求
-    watch(requestParams, () => {
+    // 监听 requestParams 的改变
+    const findOrderListFn = () => {
       loading.value = true
       findOrderList(requestParams).then(({ result }) => {
         // console.log(result)
@@ -67,12 +70,25 @@ export default {
         total.value = result.counts
         loading.value = false
       })
+    }
+    // 查询订单，参数改变时重新发请求
+    watch(requestParams, () => {
+      findOrderListFn()
     }, { immediate: true })
     const tabClick = (tab) => {
       // console.log(tab)
       // 此时：tab.index 就是订单的状态
       requestParams.orderState = tab.index
       requestParams.page = 1
+    }
+    // 删除订单
+    const onDeleteOrder = (item) => {
+      Confirm({ text: '您确定删除该条订单吗？' }).then(() => {
+        deleteOrder([item.id]).then(() => {
+          Message({ type: 'success', text: '删除订单成功' })
+          findOrderListFn()
+        })
+      }).catch(e => {})
     }
     return {
       activeName,
@@ -82,6 +98,7 @@ export default {
       loading,
       requestParams,
       total,
+      onDeleteOrder,
       ...useCancelOrder()
     }
   }
