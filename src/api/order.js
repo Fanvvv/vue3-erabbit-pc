@@ -91,7 +91,7 @@ export const cancelOrder = (orderId, cancelReason) => {
  * @param {Array<string>} ids - 删除订单，id集合
  * @returns
  */
-export const delteOrder = (ids) => {
+export const deleteOrder = (ids) => {
   return request(
     '/member/order',
     'delete',
