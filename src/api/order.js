@@ -98,3 +98,15 @@ export const deleteOrder = (ids) => {
     { ids }
   )
 }
+
+/**
+ * 确认收货
+ * @param {String} orderId - 订单ID
+ * @returns
+ */
+export const confirmOrder = (orderId) => {
+  return request(
+    `/member/order/${orderId}/receipt`,
+    'put'
+  )
+}
