@@ -1,25 +1,31 @@
 <template>
   <div class="member-order">
-    <xtx-tabs v-model="activeName" @click-tab="clickTab">
+    <xtx-tabs v-model="activeName" @tab-click="tabClick">
       <xtx-tabs-panel
         v-for="item in orderStatus"
         :key="item.id"
         :name="item.name"
         :label="item.label"
-      >
-        {{ item.label }}
-      </xtx-tabs-panel>
+      ></xtx-tabs-panel>
     </xtx-tabs>
     <!-- 订单列表 -->
-    <div class="order-list" v-if="orderList">
+    <div class="order-list">
+      <div v-if="loading" class="loading"></div>
+      <div v-if="!loading && orderList.length === 0" class="none">暂无数据</div>
       <order-item v-for="item in orderList" :key="item.id" :order="item" />
     </div>
-    <div v-else class="loading"></div>
+    <!-- 分页 -->
+    <xtx-pagination
+      v-if="total > requestParams.pageSize"
+      @current-change="requestParams.page=$event"
+      :total="total"
+      :page-size="requestParams.pageSize"
+      :current-page="requestParams.page"></xtx-pagination>
   </div>
 </template>
 
 <script>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { orderStatus } from '@/api/constant/constant'
 import OrderItem from '@/views/member/order/components/order-item'
 import { findOrderList } from '@/api/order'
@@ -31,9 +37,6 @@ export default {
   },
   setup () {
     const activeName = ref('all')
-    const clickTab = (name) => {
-      console.log(name)
-    }
     // 查询订单参数
     const requestParams = reactive({
       page: 1,
@@ -42,11 +45,27 @@ export default {
     })
     // 订单列表
     const orderList = ref([])
-    // 查询订单
-    findOrderList(requestParams).then(data => {
-      orderList.value = data.result.items
-    })
-    return { activeName, clickTab, orderStatus, orderList }
+    // 是否在加载
+    const loading = ref(false)
+    // 订单总数
+    const total = ref(0)
+    // 查询订单，参数改变时重新发请求
+    watch(requestParams, () => {
+      loading.value = true
+      findOrderList(requestParams).then(({ result }) => {
+        // console.log(result)
+        orderList.value = result.items
+        total.value = result.counts
+        loading.value = false
+      })
+    }, { immediate: true })
+    const tabClick = (tab) => {
+      // console.log(tab)
+      // 此时：tab.index 就是订单的状态
+      requestParams.orderState = tab.index
+      requestParams.page = 1
+    }
+    return { activeName, tabClick, orderStatus, orderList, loading, requestParams, total }
   }
 }
 </script>
