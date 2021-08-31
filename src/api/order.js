@@ -110,3 +110,15 @@ export const confirmOrder = (orderId) => {
     'put'
   )
 }
+
+/**
+ * 查看物流
+ * @param {String} orderId - 订单ID
+ * @returns
+ */
+export const logisticsOrder = (orderId) => {
+  return request(
+    `/member/order/${orderId}/logistics`,
+    'get'
+  )
+}
