@@ -19,6 +19,7 @@
         @on-cancel="onCancelOrder(item)"
         @on-delete="onDeleteOrder(item)"
         @on-confirm="onConfirmOrder(item)"
+        @on-logistics="onLogisticsOrder(item)"
       ></order-item>
     </div>
     <!-- 分页 -->
@@ -30,6 +31,8 @@
       :current-page="requestParams.page"></xtx-pagination>
     <!-- 取消订单组件 -->
     <order-cancel ref="orderCancelCom"></order-cancel>
+    <!-- 查看物流组件 -->
+    <order-logistics ref="orderLogisticsCom"></order-logistics>
   </div>
 </template>
 
@@ -39,6 +42,7 @@ import { orderStatus } from '@/api/constant/constant'
 import { findOrderList, deleteOrder, confirmOrder } from '@/api/order'
 import OrderItem from './components/order-item'
 import OrderCancel from './components/order-cancel'
+import OrderLogistics from './components/order-logistics'
 import Confirm from '@/components/library/Confirm'
 import Message from '@/components/library/Message'
 
@@ -46,7 +50,8 @@ export default {
   name: 'MemberOrder',
   components: {
     OrderItem,
-    OrderCancel
+    OrderCancel,
+    OrderLogistics
   },
   setup () {
     const activeName = ref('all')
@@ -101,7 +106,8 @@ export default {
       total,
       onDeleteOrder,
       ...useCancelOrder(),
-      ...useConfirmOrder()
+      ...useConfirmOrder(),
+      ...useLogisticsOrder()
     }
   }
 }
@@ -127,6 +133,14 @@ const useConfirmOrder = () => {
     }).catch(e => {})
   }
   return { onConfirmOrder }
+}
+// 封装逻辑-查看物流
+const useLogisticsOrder = () => {
+  const orderLogisticsCom = ref(null)
+  const onLogisticsOrder = (item) => {
+    orderLogisticsCom.value.open(item)
+  }
+  return { onLogisticsOrder, orderLogisticsCom }
 }
 </script>
 
