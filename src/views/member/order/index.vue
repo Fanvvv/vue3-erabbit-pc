@@ -135,7 +135,7 @@ const useConfirmOrder = () => {
   return { onConfirmOrder }
 }
 // 封装逻辑-查看物流
-const useLogisticsOrder = () => {
+export const useLogisticsOrder = () => {
   const orderLogisticsCom = ref(null)
   const onLogisticsOrder = (item) => {
     orderLogisticsCom.value.open(item)
