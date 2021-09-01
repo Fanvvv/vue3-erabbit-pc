@@ -79,9 +79,9 @@
 
 <script>
 import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import CheckoutAddress from './components/checkout-address'
-import { findCheckoutInfo, createOrder } from '@/api/order'
+import { findCheckoutInfo, createOrder, findOrderRepurchase } from '@/api/order'
 import Message from '@/components/library/Message'
 
 export default {
@@ -91,16 +91,22 @@ export default {
   },
   setup () {
     const checkoutInfo = ref(null)
-    findCheckoutInfo().then(({ result }) => {
-      checkoutInfo.value = result
-      // 需要提交的信息
-      requestParams.goods = checkoutInfo.value.goods.map(item => {
-        return {
-          skuId: item.skuId,
-          count: item.count
-        }
+    const route = useRoute()
+    if (route.query.orderId) {
+      // 再次购买结算
+      findOrderRepurchase(route.query.orderId).then(data => {
+        checkoutInfo.value = data.result
+        // 设置订单商品数据
+        requestParams.goods = data.result.goods.map(({ skuId, count }) => ({ skuId, count }))
       })
-    })
+    } else {
+      // 购物车结算
+      findCheckoutInfo().then(data => {
+        checkoutInfo.value = data.result
+        // 设置订单商品数据
+        requestParams.goods = data.result.goods.map(({ skuId, count }) => ({ skuId, count }))
+      })
+    }
     // console.log(checkoutInfo)
     // 需要提交的字段
     const requestParams = reactive({

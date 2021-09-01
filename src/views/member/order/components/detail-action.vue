@@ -16,22 +16,46 @@
       </template>
       <!-- 待发货 -->
       <template v-if="order.orderState === 2">
-        <xtx-button type="primary" size="small">再次购买</xtx-button>
+        <xtx-button
+          type="primary"
+          size="small"
+          @click="$router.push(`/member/checkout?orderId=${order.id}`)"
+        >
+          再次购买
+        </xtx-button>
       </template>
       <!-- 待收货 -->
       <template v-if="order.orderState === 3">
         <xtx-button type="primary" size="small" @click="onConfirmOrder(order)">确认收货</xtx-button>
-        <xtx-button type="plain" size="small">再次购买</xtx-button>
+        <xtx-button
+          type="plain"
+          size="small"
+          @click="$router.push(`/member/checkout?orderId=${order.id}`)"
+        >
+          再次购买
+        </xtx-button>
       </template>
       <!-- 待评价 -->
       <template v-if="order.orderState === 4">
-        <xtx-button type="primary" size="small">再次购买</xtx-button>
+        <xtx-button
+          type="primary"
+          size="small"
+          @click="$router.push(`/member/checkout?orderId=${order.id}`)"
+        >
+          再次购买
+        </xtx-button>
         <xtx-button type="plain" size="small">评价商品</xtx-button>
         <xtx-button type="gray" size="small">申请售后</xtx-button>
       </template>
       <!-- 已完成 -->
       <template v-if="order.orderState === 5">
-        <xtx-button type="primary" size="small">再次购买</xtx-button>
+        <xtx-button
+          type="primary"
+          size="small"
+          @click="$router.push(`/member/checkout?orderId=${order.id}`)"
+        >
+          再次购买
+        </xtx-button>
         <xtx-button type="plain" size="small">查看评价</xtx-button>
         <xtx-button type="gray" size="small">申请售后</xtx-button>
       </template>
