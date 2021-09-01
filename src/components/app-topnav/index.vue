@@ -3,17 +3,17 @@
     <div class="container">
       <ul>
         <template v-if="profile.token">
-          <li><a href="javascript:;"><i class="iconfont icon-user"></i>{{ profile.account }}</a></li>
+          <li><router-link to="/member"><i class="iconfont icon-user"></i>{{ profile.account }}</router-link></li>
           <li><a href="javascript:;" @click="logout">退出登录</a></li>
         </template>
         <template v-else>
           <li><router-link to="/login">请先登录</router-link></li>
           <li><a href="javascript:;">免费注册</a></li>
         </template>
-        <li><a href="javascript:;">我的订单</a></li>
-        <li><a href="javascript:;">会员中心</a></li>
-        <li><a href="javascript:;">帮助中心</a></li>
-        <li><a href="javascript:;">关于我们</a></li>
+        <li><router-link to="/member/order">我的订单</router-link></li>
+        <li><router-link to="/member">会员中心</router-link></li>
+        <li><router-link to="/member">帮助中心</router-link></li>
+        <li><router-link to="/member">关于我们</router-link></li>
         <li><a href="javascript:;"><i class="iconfont icon-phone"></i>手机版</a></li>
       </ul>
     </div>
