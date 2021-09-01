@@ -20,7 +20,7 @@
       </template>
       <!-- 待收货 -->
       <template v-if="order.orderState === 3">
-        <xtx-button type="primary" size="small">确认收货</xtx-button>
+        <xtx-button type="primary" size="small" @click="onConfirmOrder(order)">确认收货</xtx-button>
         <xtx-button type="plain" size="small">再次购买</xtx-button>
       </template>
       <!-- 待评价 -->
@@ -44,7 +44,7 @@
 
 <script>
 import OrderCancel from './order-cancel'
-import { useCancelOrder } from '../index'
+import { useCancelOrder, useConfirmOrder } from '../index'
 import { orderStatus } from '@/api/constant/constant'
 
 export default {
@@ -59,7 +59,7 @@ export default {
     }
   },
   setup () {
-    return { orderStatus, ...useCancelOrder() }
+    return { orderStatus, ...useCancelOrder(), ...useConfirmOrder() }
   }
 }
 </script>

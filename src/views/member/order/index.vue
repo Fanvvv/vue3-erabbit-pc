@@ -121,7 +121,7 @@ export const useCancelOrder = () => {
   return { onCancelOrder, orderCancelCom }
 }
 // 封装逻辑-确认收货
-const useConfirmOrder = () => {
+export const useConfirmOrder = () => {
   const onConfirmOrder = (item) => {
     // item 就是你要确认收货的订单
     Confirm({ text: '您确认收到货吗？确认后货款将会打给卖家。' }).then(() => {
