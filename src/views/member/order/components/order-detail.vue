@@ -16,6 +16,7 @@
       </template>
     </Suspense>
     <!-- 订单商品信息 -->
+    <detail-info :order="order"></detail-info>
   </div>
 </template>
 
@@ -26,13 +27,15 @@ import { findOrder } from '@/api/order'
 import DetailAction from './detail-action'
 import DetailSteps from './detail-steps'
 import DetailLogistics from './detail-logistics'
+import DetailInfo from './detail-info'
 
 export default {
   name: 'MemberOrderDetail',
   components: {
     DetailLogistics,
     DetailAction,
-    DetailSteps
+    DetailSteps,
+    DetailInfo
   },
   setup () {
     const order = ref(null)
