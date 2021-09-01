@@ -112,7 +112,7 @@ export default {
   }
 }
 // 封装逻辑-取消订单
-const useCancelOrder = () => {
+export const useCancelOrder = () => {
   const orderCancelCom = ref(null)
   const onCancelOrder = (item) => {
     // item 就是你要取消的订单
