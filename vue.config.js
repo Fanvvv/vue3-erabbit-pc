@@ -17,5 +17,9 @@ module.exports = {
       .use('url-loader')
       .loader('url-loader')
       .tap(options => Object.assign(options, { limit: 10000 }))
+    config.plugin('html').tap(args => {
+      args[0].title = '毛塘铺小兔鲜儿'
+      return args
+    })
   }
 }
