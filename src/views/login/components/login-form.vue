@@ -121,8 +121,8 @@ export default {
     // 表单信息对象 - 用于后续表单校验的对象
     const form = reactive({
       isAgree: true,
-      account: null,
-      password: null,
+      account: 'xiaotuxian001',
+      password: '123456',
       mobile: null,
       code: null
     })
